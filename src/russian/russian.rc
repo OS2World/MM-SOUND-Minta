@@ -1,0 +1,588 @@
+/***
+ russian.rc - English ressource file for Minta
+
+ Note to translators:
+    Basically you need to translate everything in "..." :-)
+    "\t", "%ld", "%s" and the like are special control sequences (C(++)
+       programmers will find them familiar) - just leave them as they are.
+    Please adjust the hotkeys (the stuff in the
+       ACCELTABLE ... BEGIN ... END
+       statements) and the corresponding "markers" for the hotkeys in the
+       dialogs above ("E~xit" e.g. means underline the "x" to show that
+       ALT+"x" is the hotkey for this button)
+    It would be nice if you could translate the comments (like this one) too.
+    An editor that supports syntax highlighting for *.rc files (like FTE
+       or EPM) could make life a bit easier for you.
+    If you have any questions, just contact me at  thth@gmx.net
+
+ Thank you very much!
+ ***/
+
+/* Please do NOT try to translate the following statement :-) */
+RCINCLUDE "src\common.rc"
+
+/** Menu *****************************************************************/ /*fold00*/
+
+MENU ID_MAIN
+BEGIN
+  SUBMENU "~F Файлы", WID_MENU_FILES
+  BEGIN
+    MENUITEM "~O Открыть...\tAlt+O",                 WID_PB_FILES
+    MENUITEM "~A Автоматически...",                  WID_PB_AUTOOPEN
+    MENUITEM SEPARATOR
+    MENUITEM "~D Удалить\tAlt+D",                    WID_PB_DELETEFROMLIST
+    MENUITEM "~E Удалить все",                       WID_PB_DELETEALLFROMLIST
+    MENUITEM SEPARATOR
+    MENUITEM "~R Переименовать...",                  WID_PB_RENAMEALL
+    MENUITEM "~L Список...\tAlt+L",                  WID_PB_LIST
+    MENUITEM SEPARATOR    
+    MENUITEM "~S Настройки...",                      WID_PB_SETTINGS
+    MENUITEM SEPARATOR    
+    MENUITEM "~X Выход\tAlt+F4",                     WID_PB_EXIT
+  END
+  SUBMENU "~T Тэг", WID_MENU_TAG
+  BEGIN
+/*    MENUITEM "~C Вырезать",                   WID_PB_CUTTAG
+    MENUITEM "~Y Копировать",                   WID_PB_COPYTAG
+    MENUITEM "~P Вставить",                     WID_PB_PASTETAG
+    MENUITEM SEPARATOR */
+    MENUITEM "~S Сохранить",                    WID_PB_SAVE
+    MENUITEM "~N Сохранить, взять следующий\tAlt+N",    WID_PB_SAVENEXT
+    MENUITEM "~P Сохранить, взять предыдущий\tAlt+P",    WID_PB_SAVEPREV
+    MENUITEM "~A Сохранить все",                WID_PB_SAVEALL
+    MENUITEM SEPARATOR
+    MENUITEM "~R Удалить\tAlt+R",               WID_PB_REMOVE
+    MENUITEM "~E Удалить все",                  WID_PB_REMOVEALL
+  END                  
+  SUBMENU "~E Приятности", WID_MENU_TAG
+  BEGIN
+#ifdef _PLAYERCOMMAND_
+    MENUITEM "~P Проиграть файл",               WID_PB_PLAY
+#endif
+    MENUITEM "~B Показывать кнопки",            WID_PB_SHOWBUTTONS,,MIA_CHECKED
+#ifdef _SHOWFILEINFO_
+    MENUITEM "~F Показывать информацию",        WID_PB_SHOWFILEINFO,,MIA_CHECKED
+#endif
+#ifdef _TOOLBAR_
+    MENUITEM "Show ~toolbar",          WID_PB_SHOWTOOLBAR,,MIA_CHECKED
+#endif
+  END                  
+  SUBMENU "~H Справка", 0, MIS_HELP
+  BEGIN
+    MENUITEM "~C Индекс справки",                   HM_HELP_CONTENTS
+    MENUITEM "Conte~xt help...",       HM_GENERAL_HELP,MIS_HELP
+    MENUITEM "~G Использование справки",            WID_MAIN_HELP
+//    MENUITEM "~KСправка по клавишам",              HM_KEYS_HELP
+    MENUITEM SEPARATOR
+    MENUITEM "~P О программе...",                  WID_PB_ABOUT
+  END
+END
+
+/** Data main window *****************************************************/ /*fold00*/
+
+DLGTEMPLATE ID_MAIN LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  PSZ_NAMEVERSION, ID_MAIN, 82, 11, 382, 193, 0L,
+            FCF_SYSMENU | FCF_TITLEBAR | FCF_MINBUTTON | FCF_TASKLIST
+    BEGIN
+        GROUPBOX        "Не выбраны файлы", WID_G_FILES, 4, 156, 298, 24
+        CONTROL         "", WID_DDL_FILES, 12, 92, 282, 79, WC_COMBOBOX, 
+                        CBS_DROPDOWNLIST | WS_GROUP | WS_TABSTOP | 
+                        WS_VISIBLE
+
+        GROUPBOX        "", WID_G_FILEINFO, 4, 80, 298, 72
+
+        RTEXT           "Version:", WID_ST_VERSION, 10, 132, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_VERSION, 76, 134, 76, 8, ES_MARGIN | ES_AUTOTAB | 
+                        ES_READONLY
+        RTEXT           "Layer:", WID_ST_LAYER, 10, 120, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_LAYER, 76, 122, 76, 8, ES_MARGIN | ES_AUTOTAB | 
+                        ES_READONLY
+        RTEXT           "Frequency:", WID_ST_FREQUENCY, 10, 108, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_FREQUENCY, 76, 110, 76, 8, ES_MARGIN | ES_AUTOTAB | 
+                        ES_READONLY
+        RTEXT           "Bitrate:", WID_ST_BITRATE, 10, 96, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_BITRATE, 76, 98, 76, 8, ES_MARGIN | ES_AUTOTAB | 
+                        ES_READONLY
+        RTEXT           "Mode:", WID_ST_MODE, 10, 84, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_MODE, 76, 86, 76, 8, ES_MARGIN | ES_AUTOTAB | 
+                        ES_READONLY
+
+        CHECKBOX        "Original", WID_CB_ORIGINAL, 166, 134, 62, 10
+        CHECKBOX        "Private", WID_CB_PRIVATE, 166, 124, 62, 10
+        CHECKBOX        "Copyright", WID_CB_COPYRIGHT, 166, 114, 62, 10
+        CHECKBOX        "CRCs", WID_CB_CRCS, 232, 134, 62, 10
+        CHECKBOX        "Padding", WID_CB_PADDING, 232, 124, 62, 10
+
+        RTEXT           "Emphasis:", WID_ST_EMPHASIS, 166, 96, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_EMPHASIS, 232, 98, 60, 8, ES_MARGIN | ES_AUTOTAB | 
+                        ES_READONLY
+        RTEXT           "Est. time:", WID_ST_TIME, 166, 84, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_TIME, 232, 86, 60, 8, ES_MARGIN | ES_AUTOTAB | 
+                        ES_READONLY
+
+        GROUPBOX        "Информация", WID_G_TAG, 4, 4, 298, 72
+
+        RTEXT           "Название:", WID_ST_TITLE, 10, 56, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_TITLE, 76, 58, 216, 8, ES_MARGIN
+        RTEXT           "Исполнитель:", WID_ST_ARTIST, 10, 44, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_ARTIST, 76, 46, 216, 8, ES_MARGIN
+        RTEXT           "Альбом:", WID_ST_ALBUM, 10, 32, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_ALBUM, 76, 34, 216, 8, ES_MARGIN
+        RTEXT           "Год:", WID_ST_YEAR, 10, 20, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_YEAR, 76, 22, 46, 8, ES_MARGIN
+        RTEXT           "Стиль:", WID_ST_GENRE, 128, 20, 60, 12, DT_VCENTER
+        CONTROL         "", WID_DDL_GENRE, 192, 0, 102, 32, WC_COMBOBOX, 
+                        CBS_DROPDOWNLIST | WS_GROUP | WS_TABSTOP | 
+                        WS_VISIBLE
+        RTEXT           "Комментарий:", WID_ST_COMMENT, 10, 8, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_COMMENT, 76, 10, 126, 8, ES_MARGIN
+        RTEXT           "Запись#", WID_ST_TRACK, 216, 8, 34, 12, DT_VCENTER
+        SPINBUTTON      WID_SB_TRACK, 254, 9, 40, 12,
+        		SPBS_NUMERICONLY | SPBS_MASTER | SPBS_JUSTRIGHT |
+                        WS_GROUP
+
+        PUSHBUTTON      "~O Открыть...", WID_PB_FILES, 310, 162, 66, 15
+        PUSHBUTTON      "~S Сохранить", WID_PB_SAVE, 310, 140, 66, 15
+        PUSHBUTTON      "Сохранить все", WID_PB_SAVEALL, 310, 124, 66, 15
+        PUSHBUTTON      "~R Удалить", WID_PB_REMOVE, 310, 102, 66, 15
+        PUSHBUTTON      "Удалить все", WID_PB_REMOVEALL, 310, 86, 66, 15
+        PUSHBUTTON      "~L Список...", WID_PB_LIST, 310, 64, 66, 15
+        PUSHBUTTON      "О программе", WID_PB_ABOUT, 310, 42, 66, 15
+        PUSHBUTTON      "~X Выход", WID_PB_EXIT, 310, 4, 66, 15
+        PUSHBUTTON      "Справка", WID_PB_HELP, 310, 26, 66, 15, BS_HELP | 
+                        BS_NOPOINTERFOCUS
+    END
+END
+
+ACCELTABLE ID_MAIN PRELOAD
+BEGIN
+   "x",    WID_PB_EXIT, CHAR, ALT
+   "o",    WID_PB_FILES, CHAR, ALT
+   "s",    WID_PB_SAVE, CHAR, ALT
+   "r",    WID_PB_REMOVE, CHAR, ALT
+   "a",    WID_PB_ABOUT, CHAR, ALT
+   "l",    WID_PB_LIST, CHAR, ALT
+   VK_F4,  WID_PB_EXIT, VIRTUALKEY, ALT
+   "n",    WID_PB_SAVENEXT, CHAR, ALT
+   "p",    WID_PB_SAVEPREV, CHAR, ALT
+   "+",    WID_PB_SAVENEXT, CHAR, ALT
+   "-",    WID_PB_SAVEPREV, CHAR, ALT
+   "d",    WID_PB_DELETEFROMLIST, CHAR, ALT
+
+   ".",    WID_PB_TEST, CHAR, ALT
+END
+
+/** Data lister window ***************************************************/ /*fold00*/
+
+DLGTEMPLATE ID_DLG_LISTER LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Создать список", ID_DLG_LISTER, 78, 57, 300, 110, WS_VISIBLE,
+            FCF_SYSMENU | FCF_TITLEBAR
+    BEGIN
+        GROUPBOX        "Выходной файл", WID_NIL, 4, 82, 292, 25
+        ENTRYFIELD      "", WID_E_LISTFILENAME, 12, 88, 228, 8, ES_MARGIN
+        PUSHBUTTON      "~F Найти", WID_PB_FIND, 246, 86, 44, 12
+
+        GROUPBOX        "Включить в список", WID_NIL, 4, 22, 146, 58
+        LISTBOX         WID_LB_INCLUDE, 10, 27, 132, 44, LS_MULTIPLESEL
+
+        GROUPBOX        "Параметры", WID_NIL, 156, 22, 140, 58
+        AUTOCHECKBOX    "~H Заголовок списка", WID_CB_OUTPUTHEADER,
+                        162, 59, 128, 10
+        AUTOCHECKBOX    "~T Общее время", WID_CB_OUTPUTTIME,
+                        162, 48, 128, 10
+        AUTOCHECKBOX    "~A Авторасстановка колонок", WID_CB_AUTOSIZE,
+                        162, 37, 128, 10
+        AUTOCHECKBOX    "~O Только файлы с тэгом", WID_CB_ONLYTAGGED,
+                        162, 26, 128, 10
+
+        DEFPUSHBUTTON   "~Ok", WID_PB_OK, 4, 3, 50, 14
+        PUSHBUTTON      "Отмена", WID_PB_CANCEL, 60, 3, 50, 14
+        PUSHBUTTON      "Справка", WID_NIL, 246, 3, 50, 14, BS_HELP | 
+                        BS_NOPOINTERFOCUS
+    END
+END
+
+ACCELTABLE ID_DLG_LISTER PRELOAD
+BEGIN
+   "f",    WID_PB_FIND, CHAR, CONTROL
+   "t",    WID_CB_OUTPUTTIME, CHAR, CONTROL
+   "h",    WID_CB_OUTPUTHEADER, CHAR, CONTROL
+   "a",    WID_CB_AUTOSIZE, CHAR, CONTROL
+   "o",    WID_PB_OK, CHAR, CONTROL
+   VK_ESC, WID_PB_CANCEL, VIRTUALKEY
+END
+
+/** Data product info window *********************************************/ /*FOLD00*/
+
+DLGTEMPLATE ID_DLG_ABOUT LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Про ""Minta""", ID_DLG_ABOUT, 90, 56, 250, 80, WS_VISIBLE, 
+            FCF_SYSMENU | FCF_TITLEBAR
+    BEGIN
+        ICON            1, ID_MAIN, 8, 58, 21, 16, WS_GROUP
+        LTEXT           PSZ_NAMEVERSION, WID_NIL, 42, 64, 202, 9
+                        PRESPARAMS PP_FOREGROUNDCOLOR, 0x00C80A0AL
+        LTEXT           "MP3 information, tagging & listing utility",
+                        WID_NIL, 42, 53, 202, 8
+        LTEXT           "Copyright ╕ 1998-2002 Thorsten Thielen", WID_NIL, 42, 44, 
+                        202, 8
+        LTEXT           "Internet: thth@gmx.net", WID_NIL, 42, 32, 202, 8
+        LTEXT           "WWW: http://www.teamos2.ipcon.de/~thielen/programs/minta",
+                        WID_NIL, 42, 13, 202, 17, DT_WORDBREAK
+        LTEXT           "Russian translation: Cyrill Vakhneyev", WID_NIL,
+                        42, 4, 202, 8
+        DEFPUSHBUTTON   "Ok", WID_NIL, 8, 4, 22, 26
+    END
+END
+
+/** Data find directory dialog *******************************************/ /*fold00*/
+
+DLGTEMPLATE ID_DLG_FINDDIR LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Каталог поиска", ID_DLG_FINDDIR, 116, 32, 200, 150,
+    	    WS_VISIBLE, FCF_SYSMENU | FCF_TITLEBAR
+    BEGIN
+        LTEXT           "~D Диск:", WID_NIL, 6, 139, 188, 8, DT_MNEMONIC
+        CONTROL         "", WID_LB_DRIVES, 6, 88, 188, 50, WC_COMBOBOX, 
+                        CBS_DROPDOWNLIST | WS_GROUP | WS_TABSTOP | 
+                        WS_VISIBLE
+        LTEXT           "~I Каталоги:", WID_NIL, 6, 115, 188, 8, DT_MNEMONIC
+        LISTBOX         WID_LB_DIRECTORIES, 6, 33, 188, 80
+        LTEXT           "", WID_ST_PATH, 6, 22, 188, 8
+        DEFPUSHBUTTON   "~Ok", DID_OK, 4, 4, 40, 14
+        PUSHBUTTON      "Отмена", DID_CANCEL, 48, 4, 40, 14
+    END
+END
+
+ACCELTABLE ID_ACCELTABLE_FINDDIR
+BEGIN
+        "o", DID_OK, CONTROL
+        "i", WID_LB_DIRECTORIES, CONTROL
+        "d", WID_LB_DRIVES, CONTROL
+        VK_ESC, DID_CANCEL, VIRTUALKEY
+END
+
+/** Data settings window *************************************************/ /*fold00*/
+
+DLGTEMPLATE ID_DLG_SETTINGS LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Настройки Minta", ID_DLG_SETTINGS, 104, 26, 280, 186, 0L,
+            FCF_SYSMENU | FCF_TITLEBAR
+    BEGIN
+        NOTEBOOK        WID_NB_SETTINGS, 5, 21, 270, 160, BKS_BACKPAGESTR | 
+                        BKS_MAJORTABTOP | BKS_ROUNDEDTABS | 
+                        BKS_TABTEXTCENTER | BKS_SPIRALBIND | WS_GROUP |
+                        BKS_TABBEDDIALOG
+        DEFPUSHBUTTON   "~Ok", WID_PB_OK, 5, 4, 60, 14
+        PUSHBUTTON      "~U По умолчанию", WID_PB_UNDO, 70, 4, 60, 14
+        PUSHBUTTON      "Справка", WID_PB_HELP, 215, 4, 60, 14, BS_HELP | 
+                        BS_NOPOINTERFOCUS
+    END
+END
+
+DLGTEMPLATE ID_DLG_SETTINGSPAGE1 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", ID_DLG_SETTINGSPAGE1, 10, 10, 220, 120, NOT FS_DLGBORDER | 
+            WS_VISIBLE
+    BEGIN
+        GROUPBOX        "Уведомлять об...", WID_NIL, 5, 51, 210, 64
+        AUTOCHECKBOX    "загрузке файлов", WID_CB_NOTIFYLOAD,
+        		11, 95, 198, 10
+        AUTOCHECKBOX    "удалении тэгов", WID_CB_NOTIFYREMOVE,
+        		11, 85, 198, 10
+        AUTOCHECKBOX    "сохранении тэгов", WID_CB_NOTIFYSAVE,
+        		11, 75, 198, 10
+        AUTOCHECKBOX    "сохранении списка", WID_CB_NOTIFYLIST,
+        		11, 65, 198, 10
+        AUTOCHECKBOX    "переименовании файлов", WID_CB_NOTIFYRENAME,
+        		11, 55, 198, 10
+        GROUPBOX        "Стиль уведомления", WID_NIL, 5, 5, 210, 42
+/* Note: You do NOT need to translate the following three statements
+         word by word :-) */
+        AUTORADIOBUTTON "Мышко-кнопочный нажиматель", WID_RB_CLICKAWAY,
+        		11, 28, 198, 10, WS_TABSTOP | WS_GROUP
+        AUTORADIOBUTTON "Самоисчезающий показыватель", WID_RB_TIMER,
+        		11, 18, 198, 10, WS_TABSTOP
+        AUTORADIOBUTTON "Аудио-акустический пищатель", WID_RB_BEEP,
+        		11, 8, 198, 10, WS_TABSTOP
+    END
+END
+
+DLGTEMPLATE ID_DLG_SETTINGSPAGE2 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", ID_DLG_SETTINGSPAGE2, 10, 10, 220, 120, NOT FS_DLGBORDER | 
+            WS_VISIBLE
+    BEGIN
+        AUTOCHECKBOX    "Сохранять данные тэга при переключении файлов",
+        		WID_CB_KEEP, 11, 101, 200, 10
+        GROUPBOX        "Сохранять...", WID_NIL, 5, 53, 210, 44
+	AUTOCHECKBOX    "Название", WID_CB_KEEPTITLE, 11, 77, 90, 10
+	AUTOCHECKBOX    "Исполнитель", WID_CB_KEEPARTIST, 117, 77, 90, 10
+	AUTOCHECKBOX    "Альбом", WID_CB_KEEPALBUM, 11, 67, 90, 10
+	AUTOCHECKBOX    "Год", WID_CB_KEEPYEAR, 117, 67, 90, 10
+	AUTOCHECKBOX    "Стиль", WID_CB_KEEPGENRE, 11, 57, 90, 10
+	AUTOCHECKBOX    "Комментарий", WID_CB_KEEPCOMMENT, 117, 57, 90, 10
+	GROUPBOX        "Параметры", WID_NIL, 5, 5, 210, 44
+        AUTOCHECKBOX    "Увеличивать/уменьшать номер записи",
+        		WID_CB_ADJUSTTRACK, 11, 29, 198,  10
+        AUTOCHECKBOX    "Сохранять только если еще не сохранялись",
+        		WID_CB_ONLYIFMISSING, 11,19, 198, 10
+    END
+END
+
+DLGTEMPLATE ID_DLG_SETTINGSPAGE3 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", ID_DLG_SETTINGSPAGE3, 10, 10, 220, 120, NOT FS_DLGBORDER | 
+            WS_VISIBLE
+    BEGIN
+        GROUPBOX        "Взять стили из файла...", WID_NIL, 5, 92, 210, 23
+        ENTRYFIELD      "", WID_E_GENRESFILE, 13, 97, 194, 8, ES_MARGIN
+        GROUPBOX        "Запуск проигрывателя", WID_NIL, 5, 65, 210, 23
+        ENTRYFIELD      "", WID_E_PLAYERCOMMAND, 13, 70, 194, 8, ES_MARGIN
+        GROUPBOX        "Другие параметры", WID_NIL, 5, 5, 210, 56
+        AUTOCHECKBOX    "Использовать имя файла как название",
+        		WID_CB_FILENAMETOTITLE, 11, 42, 198, 10
+        AUTOCHECKBOX    "Настраиваемый диалог выбора",
+        		WID_CB_CUSTOMFILEDIALOG, 11, 32, 198, 10
+        AUTOCHECKBOX    "Не предупреждать о поврежденных файлах",
+        		WID_CB_NOINVALIDMP3WARNING, 11, 22, 198, 10
+    	AUTOCHECKBOX    "Поля ввода недоступны ""Read-only""",
+        		WID_CB_ONLYREADONLY, 11, 12, 198, 10
+    END
+END
+
+DLGTEMPLATE ID_DLG_SETTINGSPAGE4 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", ID_DLG_SETTINGSPAGE4, 10, 10, 220, 120, NOT FS_DLGBORDER | 
+            WS_VISIBLE
+    BEGIN
+        GROUPBOX        "Программа", WID_NIL, 5, 62, 119, 54
+        LISTBOX         WID_LB_LANGUAGES, 11, 66, 106, 40, LS_NOADJUSTPOS
+        GROUPBOX        "Справка", WID_NIL, 5, 5, 119, 54
+        LISTBOX         WID_LB_LANGUAGESHELP, 11, 9, 106, 40, LS_NOADJUSTPOS
+        CONTROL         1, 1, 130, 5, 84, 36, WC_STATIC, SS_BITMAP | 
+                        WS_GROUP | WS_VISIBLE
+        LTEXT           "Внимание: Все изменения войдут в силу "
+                        "только после перезапуска программы!!!",
+                        WID_ST_LANGNOTE, 130, 45, 84, 70, 
+                        DT_WORDBREAK
+    END
+END
+
+/** Data notification window *********************************************/ /*fold00*/
+
+DLGTEMPLATE ID_DLG_NOTIFY LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", ID_DLG_NOTIFY, 160, 104, 200, 40, WS_VISIBLE, FCF_TITLEBAR
+    BEGIN
+        CTEXT   "", WID_ST_NOTIFY, 4, 2, 192, 36, DT_WORDBREAK
+    END
+END
+
+/** Data renamer window **************************************************/ /*fold00*/
+
+DLGTEMPLATE ID_DLG_RENAMER LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Автопереименование файлов", ID_DLG_RENAMER, 52, 48, 270, 104, WS_VISIBLE, 
+            FCF_SYSMENU | FCF_TITLEBAR
+    BEGIN
+        GROUPBOX        "Шаблон", WID_NIL, 4, 76, 262, 24
+        ENTRYFIELD      "", WID_E_TEMPLATE, 12, 82, 246, 8, ES_MARGIN
+        GROUPBOX        "Параметры", WID_NIL, 4, 24, 262, 50
+        AUTOCHECKBOX    "~L Ограничить длину имен...",
+                        WID_CB_LIMITLENGTH, 10, 54, 250, 10
+        SPINBUTTON      WID_SB_LENGTH, 24, 42, 38, 12, SPBS_MASTER | WS_GROUP
+        LTEXT           "символами", WID_NIL, 66, 42, 194, 8
+        AUTOCHECKBOX    "~S Заменить пробелы подчеркиванием", WID_CB_REPLACESPACES,
+                        10, 28, 250, 10
+        DEFPUSHBUTTON   "~R Переименовать", WID_PB_RENAME, 4, 4, 60, 16
+        PUSHBUTTON      "Отмена", WID_PB_CANCEL, 68, 4, 60, 16
+        PUSHBUTTON      "Справка", WID_PB_HELP, 206, 4, 60, 16, BS_HELP | 
+                        BS_NOPOINTERFOCUS
+    END
+END
+
+ACCELTABLE ID_DLG_RENAMER PRELOAD
+BEGIN
+   "l",    WID_CB_LIMITLENGTH, CHAR, CONTROL
+   "s",    WID_CB_REPLACESPACES, CHAR, CONTROL
+   "r",    WID_PB_RENAME, CHAR, CONTROL
+   VK_ESC, WID_PB_CANCEL, VIRTUALKEY
+END
+
+/** File dialog window ***************************************************/ /*fold00*/
+
+DLGTEMPLATE ID_DLG_FILE LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", ID_DLG_FILE, 70, 22, 300, 145, WS_VISIBLE, FCF_SYSMENU | 
+            FCF_TITLEBAR
+    BEGIN
+        LTEXT           "~Открыть файл", DID_FILENAME_TXT, 4, 127, 48, 12
+        ENTRYFIELD      "", DID_FILENAME_ED, 58, 131, 236, 8, ES_MARGIN
+        LTEXT           "~Тип файлов", DID_FILTER_TXT, 4, 114, 46, 12, DT_VCENTER
+        CONTROL         "", DID_FILTER_CB, 56, 81, 240, 45, WC_COMBOBOX, 
+                        CBS_DROPDOWNLIST | WS_GROUP | WS_TABSTOP | 
+                        WS_VISIBLE
+        LTEXT           "~Диски", DID_DRIVE_TXT, 4, 103, 34, 8
+        CONTROL         "", DID_DRIVE_CB, 4, 22, 34, 80, WC_COMBOBOX, 
+                        CBS_DROPDOWNLIST | WS_GROUP | WS_TABSTOP | 
+                        WS_VISIBLE
+        LTEXT           "~Каталоги", DID_DIRECTORY_TXT, 44, 103, 122, 8
+        LISTBOX         DID_DIRECTORY_LB, 44, 22, 122, 80, LS_NOADJUSTPOS | LS_OWNERDRAW | LS_HORZSCROLL
+        LTEXT           "~Файлы", DID_FILES_TXT, 172, 103, 124, 8
+        LISTBOX         DID_FILES_LB, 172, 22, 124, 80, LS_NOADJUSTPOS | 
+                        LS_HORZSCROLL
+        DEFPUSHBUTTON   "~Ok", DID_OK_PB, 4, 4, 50, 14
+        PUSHBUTTON      "Отмена", DID_CANCEL_PB, 60, 4, 50, 14
+    END
+END
+
+/** String table *********************************************************/ /*fold00*/
+
+STRINGTABLE
+{
+    IDS_ERROR_GENREFILEHEADING              "ОШИБКА ФАЙЛА СТИЛЕЙ"
+    IDS_ERROR_COULDNOTOPENGENREFILE         "Не могу открыть файл стилей '%s'. Ошибка %d."
+
+    IDS_ERROR_HELPERHEADING                 "ОШИБКА СПРАВКИ"
+    IDS_ERROR_COULDNOTINITHELP              "Не могу открыть файл справки."
+    IDS_ERROR_COULDNOTINITHELPFILE          "Не могу открыть файл справки. Есть ли файл '%s' в каталоге программы Minta?"
+
+    IDS_ERROR_BORINGLISTHEADING             "ОДНАКО... ЭТО БУДЕТ НЕПРАВИЛЬНЫЙ СПИСОК..."
+    IDS_ERROR_BORINGLIST                    "Вы должны выбрать как минимум один файл для создания списка."
+
+    IDS_ERROR_LISTFILEHEADING               "ОШИБКА СПИСКА"
+    IDS_ERROR_MUSTGIVEVALIDLISTFILENAME     "Вы должны выбрать существующий список."
+
+    IDS_ERROR_GENERALHEADING                "ОДНАКО..."
+    IDS_ERROR_WRONGGENREFOUND               "Неверная информация о стиле в MP3 файле."
+
+    IDS_SCANNINGFORMAT                      "Сканирую - %s"
+    IDS_WRITINGFORMAT                       "Записываю - %s"
+    IDS_IGNORINGFORMAT                      "Пропускаю - %s"
+    IDS_SEARCHINGFORMAT                     "Ищу - %s"
+    IDS_SAVINGFORMAT                        "Сохраняю - %s"
+    IDS_RENAMINGFORMAT                      "Переименовываю - %s"
+    IDS_REMOVINGFORMAT                      "Удаляю - %s"
+
+    IDS_FILESWRITTENTOLISTHEADING           "ФАЙЛЫ ВНЕСЕНЫ В СПИСОК"
+    IDS_FILESWRITTENTOLIST                  "Все выбранные файлы внесены в список '%s'."
+
+    IDS_ERROR_COULDNOTOPENLISTFILE          "Не могу открыть список '%s'."
+
+    IDS_SELECTLISTFILE                      "Выберите список"
+
+    IDS_LISTFILENAME                        "Filename"
+    IDS_LISTTITLE                           "Title"
+    IDS_LISTTIME                            "Time"
+    IDS_LISTARTIST                          "Artist"
+    IDS_LISTALBUM                           "Album"
+    IDS_LISTYEAR                            "Year"
+    IDS_LISTGENRE                           "Genre"
+    IDS_LISTCOMMENT                         "Comment"
+    IDS_LISTVERSION                         "Ver."
+    IDS_LISTLAYER                           "Layer"
+    IDS_LISTFREQUENCY                       "Freq."
+    IDS_LISTBITRATE                         "Bitrate"
+    IDS_LISTMODE                            "Mode"
+
+    IDS_ERROR_MP3FILEHEADING                "ОШИБКА В ФАЙЛЕ MP3"
+    IDS_ERROR_COULDNOTOPENMP3FILE           "Не могу открыть файл MP3 '%s'. Ошибка %d."
+    IDS_ERROR_NOVALIDMP3FILE                "Файл '%s' не похож на файл MP3. Если Вы его испортите, то это будут Ваши проблемы."
+    IDS_ERROR_COULDNOTGETFILESIZE           "Не могу определить размер файла."
+    IDS_ERROR_COULDNOTREMOVETAG             "Не могу удалить тэг."
+
+    IDS_GENRENONE                           "(пусто)"
+    IDS_OPENMP3FILES                        "Открываю файлы MP3"
+
+    IDS_NOFILENOTAG                         "Нет файла - нет тэга!"
+    IDS_ID3TAGREADONLY                      "ID3-тэг v%s (только чтение)"
+    IDS_ID3TAG                              "ID3-тэг v%s"
+    IDS_FILEHASNOTAGREADONLY                "У файла нет ID3-тэга (только чтение)"
+    IDS_FILEHASNOTAG                        "У файла нет ID3-тэга"
+
+    IDS_NOFILESSELECTED                     "Файлы не выбраны"
+    IDS_ONEFILESELECTED                     "Выбран 1 файл"
+    IDS_FILESSELECTED                       "Выбрано %lu файлов"
+
+    IDS_FILESINSERTEDHEADING                "ФАЙЛЫ ВСТАВЛЕНЫ"
+    IDS_FILESWEREINSERTED                   "%ld новых файлов MP3 из каталога и его подкаталогов внесены в список."
+    IDS_ONEFILEWASINSERTED                  "Найден и внесен в список один новый файл MP3."
+    IDS_NOFILESFOUNDHEADING                 "НОВЫХ ФАЙЛОВ MP3 НЕ НАЙДЕНО"
+    IDS_NONEWFILESWEREFOUND                 "Не найдено новых файлов MP3 в каталоге и его подкаталогах."
+
+    IDS_ERROR_INIFILEHEADING                "ОШИБКА INI-ФАЙЛА"
+    IDS_ERROR_NOOROLDINIFILE                "Версия INI-файла ('%s') не совпадает с текущей версией Minta (или файл не найденo). Установлены значения по умолчанию."
+    IDS_ERROR_COULDNOTOPENINIFILE           "Не могу открыть INI-файл '%s'. Установлены значения по умолчанию."
+
+    IDS_XOFX                                "%ld из %ld"
+    IDS_OK                                  "Ok"
+
+    IDS_REALLYSAVETAGSHEADING               "ДЕЙСТВИТЕЛЬНО СОХРАНИТЬ?"
+    IDS_REALLYSAVETAGS                      "Добавить текущий тэг ко всем выбранным файлам?"
+
+    IDS_SAVEALL                             "Сохранить все"
+    IDS_TAGSSAVEDHEADING                    "ТЭГИ СОХРАНЕНЫ"
+    IDS_SOMETAGSSAVED                       "Тэги сохранены в %ld файлах из выбранных (Возможно остальные в режиме ""Только чтение"")."
+    IDS_ALLTAGSSAVED                        "Тэги сохранены во всех выбранных файлах"
+
+    IDS_REALLYRENAMEALLHEADING              "ДЕЙСТВИТЕЛЬНО ПЕРЕИМЕНОВАТЬ?"
+    IDS_REALLYRENAMEALL                     "Переименовать все файлы (с тэгом) в их Title?"
+    IDS_ERROR_RENAMINGFAILED                "Не могу переименовать файл '%s': Ошибка %d."
+
+    IDS_FILESRENAMEDHEADING                 "ФАЙЛЫ ПЕРЕИМЕНОВАНЫ"
+    IDS_SOMEFILESRENAMED                    "Переименовано %ld выбранных файлов (Возможно у остальных нет тэга)."
+    IDS_ALLFILESRENAMED                     "Все выбранные файлы переименованы."
+
+    IDS_REALLYREMOVETAGSHEADING             "ДЕЙСТВИТЕЛЬНО УДАЛИТЬ?"
+    IDS_REALLYREMOVETAGS                    "Действительно удалить все выбранные файлы?"
+
+    IDS_TAGSREMOVEDHEADING                  "ТЭГИ УДАЛЕНЫ"
+    IDS_SOMETAGSREMOVED                     "Тэги удалены в %ld файлах из выбранных (Возможно остальные в режиме ""Только чтение"" или в них нет тэга)"
+    IDS_ALLTAGSREMOVED                      "Тэги удалены во всех выбранных файлах."
+
+    IDS_TOTALTIME                           "Общее время: "
+
+    IDS_UNKNOWN                             "Unknown"
+    IDS_NONE                                "None"
+
+    IDS_STEREO                              "Stereo"
+    IDS_JOINTSTEREO                         "Joint-Stereo"
+    IDS_DUALCHANNEL                         "Dual-Channel"
+    IDS_SINGLECHANNEL                       "Mono"
+
+    IDS_TITLE                               "Название"
+    IDS_TIME                                "Время"
+    IDS_ARTIST                              "Исполнитель"
+    IDS_ALBUM                               "Альбом"
+    IDS_YEAR                                "Год"
+    IDS_GENRE                               "Стиль"
+    IDS_COMMENT                             "Комментарий"
+    IDS_FILENAMEPATH                        "Имя файла и путь"
+    IDS_VERSION                             "Version"
+    IDS_LAYER                               "Layer"
+    IDS_FREQUENCY                           "Frequency"
+    IDS_BITRATE                             "Bitrate"
+    IDS_MODE                                "Mode"
+
+    IDS_PAGENOTIFICATION                    "Уведомление"
+    IDS_PAGEKEEPINFO                        "Сохранять"
+    IDS_PAGEMISC                            "Разное"
+    IDS_PAGELANGUAGE                        "Язык"
+
+    IDS_ERROR_LAUNCHFAILED                  "Не удалось запустить проигрыватель '%s'. Ошибка %d."
+    IDS_ERROR_GENREIDALREADYASSIGNED        "Стиль (%d) в строке %d уже используется."
+
+    IDS_UNKNOWNGENRENAME                    "(неизвестно)"
+    IDS_ERROR_NOFILENODIR                   "'%s': Ни файла, ни каталога... Чего дальше делать? Ошибка %d."
+
+    IDS_NOFILENOINFO                        "Нет файла - нет информации!"
+    IDS_FILEINFOGROUPNAME                   "Информация о файле"
+    IDS_FILEINFOGROUPNAMEINVALID            "Информация о файле(Возможно неправильная)"
+
+    IDS_FILEHASUNSUPPORTEDTAG               "ID3-тэг v%s (пока не поддерживается)"
+}
+
+/*************************************************************************/

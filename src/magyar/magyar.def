@@ -1,0 +1,8 @@
+;
+;       MAGYAR.DLL module definition file
+;
+
+LIBRARY  MAGYAR
+
+DESCRIPTION 'Hungarion-language resources for Minta.'
+

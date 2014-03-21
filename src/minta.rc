@@ -1,0 +1,39 @@
+/***
+ This file belongs to the Minta distribution.
+ Copyright (C) 1998-2003 Thorsten Thielen <thth@gmx.net>
+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ ***/
+
+BITMAP  1 src\data\open.bmp
+BITMAP  2 src\data\autoopen.bmp
+BITMAP  3 src\data\delete.bmp
+BITMAP  4 src\data\delall.bmp
+BITMAP  5 src\data\list.bmp
+BITMAP  6 src\data\rename.bmp
+BITMAP  7 src\data\settings.bmp
+BITMAP  8 src\data\save.bmp
+BITMAP  9 src\data\savenext.bmp
+BITMAP 10 src\data\saveprev.bmp
+BITMAP 11 src\data\saveall.bmp
+BITMAP 12 src\data\remove.bmp
+BITMAP 13 src\data\remall.bmp
+BITMAP 14 src\data\play.bmp
+BITMAP 15 src\data\buttons.bmp
+BITMAP 16 src\data\fileinfo.bmp
+BITMAP 17 src\data\info.bmp
+BITMAP 18 src\data\help.bmp
+BITMAP 19 src\data\prev.bmp
+BITMAP 20 src\data\next.bmp

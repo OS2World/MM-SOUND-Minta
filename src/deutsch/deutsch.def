@@ -1,0 +1,8 @@
+;
+;       DEUTSCH.DLL module definition file
+;
+
+LIBRARY  DEUTSCH
+
+DESCRIPTION 'German-language resources for Minta.'
+

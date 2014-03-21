@@ -1,0 +1,589 @@
+/***
+ english.rc - English ressource file for Minta
+
+ Note to translators:
+    Basically you need to translate everything in "..." :-)
+    "\t", "%ld", "%s" and the like are special control sequences (C(++)
+       programmers will find them familiar) - just leave them as they are.
+    Please adjust the hotkeys (the stuff in the
+       ACCELTABLE ... BEGIN ... END
+       statements) and the corresponding "markers" for the hotkeys in the
+       dialogs above ("E~xit" e.g. means underline the "x" to show that
+       ALT+"x" is the hotkey for this button)
+    It would be nice if you could translate the comments (like this one) too.
+    An editor that supports syntax highlighting for *.rc files (like FTE
+       or EPM) could make life a bit easier for you.
+    If you have any questions, just contact me at  thth@gmx.net
+
+    "Liy much!
+ ***/
+
+/* Please do NOT try to translate the following statement :-) */
+RCINCLUDE "src\common.rc"
+
+/** Menu *****************************************************************/ /*fold00*/
+
+MENU ID_MAIN
+BEGIN
+  SUBMENU "~Files", WID_MENU_FILES
+  BEGIN
+    MENUITEM "~Open...\tAlt+O",        WID_PB_FILES
+    MENUITEM "~Auto-open...",          WID_PB_AUTOOPEN
+    MENUITEM SEPARATOR
+    MENUITEM "R~elease current\tAlt+D", WID_PB_DELETEFROMLIST
+    MENUITEM "Release all",            WID_PB_DELETEALLFROMLIST
+    MENUITEM SEPARATOR
+    MENUITEM "~Rename...",             WID_PB_RENAMEALL
+    MENUITEM "~List...\tAlt+L",        WID_PB_LIST
+    MENUITEM SEPARATOR    
+    MENUITEM "~Settings...",           WID_PB_SETTINGS
+    MENUITEM SEPARATOR    
+    MENUITEM "E~xit\tAlt+F4",          WID_PB_EXIT
+  END
+  SUBMENU "~Tag", WID_MENU_TAG
+  BEGIN
+/*    MENUITEM "~Cut",                   WID_PB_CUTTAG
+    MENUITEM "Cop~y",                  WID_PB_COPYTAG
+    MENUITEM "~Paste",                 WID_PB_PASTETAG
+    MENUITEM SEPARATOR */
+    MENUITEM "~Save current",          WID_PB_SAVE
+    MENUITEM "Save & ~next\tAlt+N",    WID_PB_SAVENEXT
+    MENUITEM "Save & ~previous\tAlt+P",WID_PB_SAVEPREV
+    MENUITEM "Save ~all",              WID_PB_SAVEALL
+    MENUITEM SEPARATOR
+    MENUITEM "~Remove current\tAlt+R", WID_PB_REMOVE
+    MENUITEM "R~emove all",            WID_PB_REMOVEALL
+  END                  
+  SUBMENU "~Extras", WID_MENU_TAG
+  BEGIN
+#ifdef _PLAYERCOMMAND_
+    MENUITEM "~Play file",             WID_PB_PLAY
+#endif
+    MENUITEM "Show ~buttons",          WID_PB_SHOWBUTTONS,,MIA_CHECKED
+#ifdef _SHOWFILEINFO_
+    MENUITEM "Show ~fileinfo",         WID_PB_SHOWFILEINFO,,MIA_CHECKED
+#endif
+#ifdef _TOOLBAR_
+    MENUITEM "Show ~toolbar",          WID_PB_SHOWTOOLBAR,,MIA_CHECKED
+#endif
+  END                  
+  SUBMENU "~Help", 0, MIS_HELP
+  BEGIN
+    MENUITEM "Help ~contents...",      HM_HELP_CONTENTS
+    MENUITEM "Conte~xt help...",       HM_GENERAL_HELP,MIS_HELP
+    MENUITEM "~General help...",       WID_MAIN_HELP
+//    MENUITEM "~Keys help...",          HM_KEYS_HELP
+    MENUITEM SEPARATOR
+    MENUITEM "~Product information",   WID_PB_ABOUT
+  END
+END
+
+/** Data main window *****************************************************/ /*fold00*/
+
+DLGTEMPLATE ID_MAIN LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  PSZ_NAMEVERSION, ID_MAIN, 82, 11, 382, 193, 0L,
+            FCF_SYSMENU | FCF_TITLEBAR | FCF_MINBUTTON | FCF_TASKLIST
+    BEGIN
+        GROUPBOX        "No files selected", WID_G_FILES, 4, 156, 298, 24
+        CONTROL         "", WID_DDL_FILES, 12, 92, 282, 79, WC_COMBOBOX, 
+                        CBS_DROPDOWNLIST | WS_GROUP | WS_TABSTOP | 
+                        WS_VISIBLE
+
+        GROUPBOX        "", WID_G_FILEINFO, 4, 80, 298, 72
+
+        RTEXT           "Version:", WID_ST_VERSION, 10, 132, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_VERSION, 76, 134, 76, 8, ES_MARGIN | ES_AUTOTAB | 
+                        ES_READONLY
+        RTEXT           "Layer:", WID_ST_LAYER, 10, 120, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_LAYER, 76, 122, 76, 8, ES_MARGIN | ES_AUTOTAB | 
+                        ES_READONLY
+        RTEXT           "Frequency:", WID_ST_FREQUENCY, 10, 108, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_FREQUENCY, 76, 110, 76, 8, ES_MARGIN | ES_AUTOTAB | 
+                        ES_READONLY
+        RTEXT           "Bitrate:", WID_ST_BITRATE, 10, 96, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_BITRATE, 76, 98, 76, 8, ES_MARGIN | ES_AUTOTAB | 
+                        ES_READONLY
+        RTEXT           "Mode:", WID_ST_MODE, 10, 84, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_MODE, 76, 86, 76, 8, ES_MARGIN | ES_AUTOTAB | 
+                        ES_READONLY
+
+        CHECKBOX        "Original", WID_CB_ORIGINAL, 166, 134, 62, 10
+        CHECKBOX        "Private", WID_CB_PRIVATE, 166, 124, 62, 10
+        CHECKBOX        "Copyright", WID_CB_COPYRIGHT, 166, 114, 62, 10
+        CHECKBOX        "CRCs", WID_CB_CRCS, 232, 134, 62, 10
+        CHECKBOX        "Padding", WID_CB_PADDING, 232, 124, 62, 10
+
+        RTEXT           "Emphasis:", WID_ST_EMPHASIS, 166, 96, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_EMPHASIS, 232, 98, 60, 8, ES_MARGIN | ES_AUTOTAB | 
+                        ES_READONLY
+        RTEXT           "Est. time:", WID_ST_TIME, 166, 84, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_TIME, 232, 86, 60, 8, ES_MARGIN | ES_AUTOTAB | 
+                        ES_READONLY
+
+        GROUPBOX        "Tagged information", WID_G_TAG, 4, 4, 298, 72
+
+        RTEXT           "Title:", WID_ST_TITLE, 10, 56, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_TITLE, 76, 58, 216, 8, ES_MARGIN
+        RTEXT           "Artist:", WID_ST_ARTIST, 10, 44, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_ARTIST, 76, 46, 216, 8, ES_MARGIN
+        RTEXT           "Album:", WID_ST_ALBUM, 10, 32, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_ALBUM, 76, 34, 216, 8, ES_MARGIN
+        RTEXT           "Year:", WID_ST_YEAR, 10, 20, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_YEAR, 76, 22, 46, 8, ES_MARGIN
+        RTEXT           "Genre:", WID_ST_GENRE, 128, 20, 60, 12, DT_VCENTER
+        CONTROL         "", WID_DDL_GENRE, 192, 0, 102, 32, WC_COMBOBOX, 
+                        CBS_DROPDOWNLIST | WS_GROUP | WS_TABSTOP | 
+                        WS_VISIBLE
+        RTEXT           "Comment:", WID_ST_COMMENT, 10, 8, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_COMMENT, 76, 10, 126, 8, ES_MARGIN
+        RTEXT           "Track #", WID_ST_TRACK, 216, 8, 34, 12, DT_VCENTER
+        SPINBUTTON      WID_SB_TRACK, 254, 9, 40, 12,
+        		SPBS_NUMERICONLY | SPBS_MASTER | SPBS_JUSTRIGHT |
+                        WS_GROUP
+
+        PUSHBUTTON      "~Open...", WID_PB_FILES, 310, 162, 66, 15
+        PUSHBUTTON      "~Save", WID_PB_SAVE, 310, 140, 66, 15
+        PUSHBUTTON      "Save all", WID_PB_SAVEALL, 310, 124, 66, 15
+        PUSHBUTTON      "~Remove", WID_PB_REMOVE, 310, 102, 66, 15
+        PUSHBUTTON      "Remove all", WID_PB_REMOVEALL, 310, 86, 66, 15
+        PUSHBUTTON      "~List...", WID_PB_LIST, 310, 64, 66, 15
+        PUSHBUTTON      "~About", WID_PB_ABOUT, 310, 42, 66, 15
+        PUSHBUTTON      "E~xit", WID_PB_EXIT, 310, 4, 66, 15
+        PUSHBUTTON      "Help", WID_PB_HELP, 310, 26, 66, 15, BS_HELP | 
+                        BS_NOPOINTERFOCUS
+    END
+END
+
+ACCELTABLE ID_MAIN PRELOAD
+BEGIN
+   "x",    WID_PB_EXIT, CHAR, ALT
+   "o",    WID_PB_FILES, CHAR, ALT
+   "s",    WID_PB_SAVE, CHAR, ALT
+   "r",    WID_PB_REMOVE, CHAR, ALT
+   "a",    WID_PB_ABOUT, CHAR, ALT
+   "l",    WID_PB_LIST, CHAR, ALT
+   VK_F4,  WID_PB_EXIT, VIRTUALKEY, ALT
+   "n",    WID_PB_SAVENEXT, CHAR, ALT
+   "p",    WID_PB_SAVEPREV, CHAR, ALT
+   "+",    WID_PB_SAVENEXT, CHAR, ALT
+   "-",    WID_PB_SAVEPREV, CHAR, ALT
+   "d",    WID_PB_DELETEFROMLIST, CHAR, ALT
+
+   ".",    WID_PB_TEST, CHAR, ALT
+END
+
+/** Data lister window ***************************************************/ /*fold00*/
+
+DLGTEMPLATE ID_DLG_LISTER LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Make list", ID_DLG_LISTER, 78, 57, 300, 110, WS_VISIBLE,
+            FCF_SYSMENU | FCF_TITLEBAR
+    BEGIN
+        GROUPBOX        "Output file", WID_NIL, 4, 82, 292, 25
+        ENTRYFIELD      "", WID_E_LISTFILENAME, 12, 88, 228, 8, ES_MARGIN
+        PUSHBUTTON      "~Find...", WID_PB_FIND, 246, 86, 44, 12
+
+        GROUPBOX        "Information to include", WID_NIL, 4, 22, 146, 58
+        LISTBOX         WID_LB_INCLUDE, 10, 27, 132, 44, LS_MULTIPLESEL
+
+        GROUPBOX        "Options", WID_NIL, 156, 22, 140, 58
+        AUTOCHECKBOX    "Output list ~header", WID_CB_OUTPUTHEADER,
+                        162, 59, 128, 10
+        AUTOCHECKBOX    "Output total ~time", WID_CB_OUTPUTTIME,
+                        162, 48, 128, 10
+        AUTOCHECKBOX    "~Autosize columns", WID_CB_AUTOSIZE,
+                        162, 37, 128, 10
+        AUTOCHECKBOX    "O~nly files with tag", WID_CB_ONLYTAGGED,
+                        162, 26, 128, 10
+
+        DEFPUSHBUTTON   "~Ok", WID_PB_OK, 4, 3, 50, 14
+        PUSHBUTTON      "Cancel", WID_PB_CANCEL, 60, 3, 50, 14
+        PUSHBUTTON      "Help", WID_NIL, 246, 3, 50, 14, BS_HELP | 
+                        BS_NOPOINTERFOCUS
+    END
+END
+
+ACCELTABLE ID_DLG_LISTER PRELOAD
+BEGIN
+   "f",    WID_PB_FIND, CHAR, CONTROL
+   "t",    WID_CB_OUTPUTTIME, CHAR, CONTROL
+   "h",    WID_CB_OUTPUTHEADER, CHAR, CONTROL
+   "a",    WID_CB_AUTOSIZE, CHAR, CONTROL
+   "n",    WID_CB_ONLYTAGGED, CHAR, CONTROL
+   "o",    WID_PB_OK, CHAR, CONTROL
+   VK_ESC, WID_PB_CANCEL, VIRTUALKEY
+END
+
+/** Data product info window *********************************************/ /*fold00*/
+
+DLGTEMPLATE ID_DLG_ABOUT LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "About ""Minta""", ID_DLG_ABOUT, 90, 56, 250, 80, WS_VISIBLE, 
+            FCF_SYSMENU | FCF_TITLEBAR
+    BEGIN
+        ICON            1, ID_MAIN, 8, 58, 21, 16, WS_GROUP
+        LTEXT           PSZ_NAMEVERSION, WID_NIL, 42, 64, 202, 9
+                        PRESPARAMS PP_FOREGROUNDCOLOR, 0x00C80A0AL
+        LTEXT           "MP3 information, tagging & listing utility",
+                        WID_NIL, 42, 53, 202, 8
+        LTEXT           "Copyright ¸ 1998-2002 Thorsten Thielen", WID_NIL, 42, 44, 
+                        202, 8
+        LTEXT           "Internet: thth@gmx.net", WID_NIL, 42, 32, 202, 8
+        LTEXT           "WWW: http://www.teamos2.ipcon.de/~thielen/programs/minta",
+                        WID_NIL, 42, 13, 202, 17, DT_WORDBREAK
+        LTEXT           "English translation: Thorsten Thielen", WID_NIL,
+                        42, 4, 202, 8
+        DEFPUSHBUTTON   "Ok", WID_NIL, 8, 4, 22, 26
+    END
+END
+
+/** Data find directory dialog *******************************************/ /*fold00*/
+
+DLGTEMPLATE ID_DLG_FINDDIR LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Directory to search", ID_DLG_FINDDIR, 116, 32, 200, 150,
+    	    WS_VISIBLE, FCF_SYSMENU | FCF_TITLEBAR
+    BEGIN
+        LTEXT           "~Drive:", WID_NIL, 6, 139, 188, 8, DT_MNEMONIC
+        CONTROL         "", WID_LB_DRIVES, 6, 88, 188, 50, WC_COMBOBOX, 
+                        CBS_DROPDOWNLIST | WS_GROUP | WS_TABSTOP | 
+                        WS_VISIBLE
+        LTEXT           "D~irectories:", WID_NIL, 6, 115, 188, 8, DT_MNEMONIC
+        LISTBOX         WID_LB_DIRECTORIES, 6, 33, 188, 80
+        LTEXT           "", WID_ST_PATH, 6, 22, 188, 8
+        DEFPUSHBUTTON   "~Ok", DID_OK, 4, 4, 40, 14
+        PUSHBUTTON      "Cancel", DID_CANCEL, 48, 4, 40, 14
+    END
+END
+
+ACCELTABLE ID_ACCELTABLE_FINDDIR
+BEGIN
+        "o", DID_OK, CONTROL
+        "i", WID_LB_DIRECTORIES, CONTROL
+        "d", WID_LB_DRIVES, CONTROL
+        VK_ESC, DID_CANCEL, VIRTUALKEY
+END
+
+/** Data settings window *************************************************/ /*fold00*/
+
+DLGTEMPLATE ID_DLG_SETTINGS LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Minta settings", ID_DLG_SETTINGS, 104, 26, 280, 186, 0L,
+            FCF_SYSMENU | FCF_TITLEBAR
+    BEGIN
+        NOTEBOOK        WID_NB_SETTINGS, 5, 21, 270, 160, BKS_BACKPAGESTR | 
+                        BKS_MAJORTABTOP | BKS_ROUNDEDTABS | 
+                        BKS_TABTEXTCENTER | BKS_SPIRALBIND | WS_GROUP |
+                        BKS_TABBEDDIALOG
+        DEFPUSHBUTTON   "~Ok", WID_PB_OK, 5, 4, 60, 14
+        PUSHBUTTON      "~Undo", WID_PB_UNDO, 70, 4, 60, 14
+        PUSHBUTTON      "Help", WID_PB_HELP, 215, 4, 60, 14, BS_HELP | 
+                        BS_NOPOINTERFOCUS
+    END
+END
+
+DLGTEMPLATE ID_DLG_SETTINGSPAGE1 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", ID_DLG_SETTINGSPAGE1, 10, 10, 220, 120, NOT FS_DLGBORDER | 
+            WS_VISIBLE
+    BEGIN
+        GROUPBOX        "Notify me when ...", WID_NIL, 5, 51, 210, 64
+        AUTOCHECKBOX    "files have been loaded", WID_CB_NOTIFYLOAD,
+        		11, 95, 198, 10
+        AUTOCHECKBOX    "tags have been removed from files", WID_CB_NOTIFYREMOVE,
+        		11, 85, 198, 10
+        AUTOCHECKBOX    "tags have been saved to files", WID_CB_NOTIFYSAVE,
+        		11, 75, 198, 10
+        AUTOCHECKBOX    "files have been written to list", WID_CB_NOTIFYLIST,
+        		11, 65, 198, 10
+        AUTOCHECKBOX    "files have been renamed", WID_CB_NOTIFYRENAME,
+        		11, 55, 198, 10
+        GROUPBOX        "Notification style", WID_NIL, 5, 5, 210, 42
+/* Note: You do NOT need to translate the following three statements
+         word by word :-) */
+        AUTORADIOBUTTON """Click-away"" message box", WID_RB_CLICKAWAY,
+        		11, 28, 198, 10, WS_TABSTOP | WS_GROUP
+        AUTORADIOBUTTON "Timer controlled auto notifier", WID_RB_TIMER,
+        		11, 18, 198, 10, WS_TABSTOP
+        AUTORADIOBUTTON "Audio-acustic beeping device", WID_RB_BEEP,
+        		11, 8, 198, 10, WS_TABSTOP
+    END
+END
+
+DLGTEMPLATE ID_DLG_SETTINGSPAGE2 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", ID_DLG_SETTINGSPAGE2, 10, 10, 220, 120, NOT FS_DLGBORDER | 
+            WS_VISIBLE
+    BEGIN
+        AUTOCHECKBOX    "Keep (some) tag info when switching files",
+        		WID_CB_KEEP, 11, 101, 200, 10
+        GROUPBOX        "Keep ...", WID_NIL, 5, 53, 210, 44
+	AUTOCHECKBOX    "Title", WID_CB_KEEPTITLE, 11, 77, 90, 10
+	AUTOCHECKBOX    "Artist", WID_CB_KEEPARTIST, 117, 77, 90, 10
+	AUTOCHECKBOX    "Album", WID_CB_KEEPALBUM, 11, 67, 90, 10
+	AUTOCHECKBOX    "Year", WID_CB_KEEPYEAR, 117, 67, 90, 10
+	AUTOCHECKBOX    "Genre", WID_CB_KEEPGENRE, 11, 57, 90, 10
+	AUTOCHECKBOX    "Comment", WID_CB_KEEPCOMMENT, 117, 57, 90, 10
+	GROUPBOX        "Options", WID_NIL, 5, 5, 210, 44
+        AUTOCHECKBOX    "Increase/decrease track number",
+        		WID_CB_ADJUSTTRACK, 11, 29, 198,  10
+        AUTOCHECKBOX    "Only keep if info not already present",
+        		WID_CB_ONLYIFMISSING, 11,19, 198, 10
+    END
+END
+
+DLGTEMPLATE ID_DLG_SETTINGSPAGE3 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", ID_DLG_SETTINGSPAGE3, 10, 10, 220, 120, NOT FS_DLGBORDER | 
+            WS_VISIBLE
+    BEGIN
+        GROUPBOX        "Read genres from file ...", WID_NIL, 5, 92, 210, 23
+        ENTRYFIELD      "", WID_E_GENRESFILE, 13, 97, 194, 8, ES_MARGIN
+        GROUPBOX        "Player command", WID_NIL, 5, 65, 210, 23
+        ENTRYFIELD      "", WID_E_PLAYERCOMMAND, 13, 70, 194, 8, ES_MARGIN
+        GROUPBOX        "Other options", WID_NIL, 5, 5, 210, 56
+        AUTOCHECKBOX    "Use filename as Title when file has none",
+        		WID_CB_FILENAMETOTITLE, 11, 42, 198, 10
+        AUTOCHECKBOX    "Use custom file dialog",
+        		WID_CB_CUSTOMFILEDIALOG, 11, 32, 198, 10
+        AUTOCHECKBOX    "No warning about invalid files",
+        		WID_CB_NOINVALIDMP3WARNING, 11, 22, 198, 10
+    	AUTOCHECKBOX    "Read-only: entryfields only read-only",
+        		WID_CB_ONLYREADONLY, 11, 12, 198, 10
+    END
+END
+
+DLGTEMPLATE ID_DLG_SETTINGSPAGE4 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", ID_DLG_SETTINGSPAGE4, 10, 10, 220, 120, NOT FS_DLGBORDER | 
+            WS_VISIBLE
+    BEGIN
+        GROUPBOX        "Program", WID_NIL, 5, 62, 119, 54
+        LISTBOX         WID_LB_LANGUAGES, 11, 66, 106, 40, LS_NOADJUSTPOS
+        GROUPBOX        "Online help", WID_NIL, 5, 5, 119, 54
+        LISTBOX         WID_LB_LANGUAGESHELP, 11, 9, 106, 40, LS_NOADJUSTPOS
+        CONTROL         1, 1, 130, 5, 84, 36, WC_STATIC, SS_BITMAP | 
+                        WS_GROUP | WS_VISIBLE
+        LTEXT           "Note: This settings will take effect for the first "
+                        "time at the next start of the program.",
+                        WID_ST_LANGNOTE, 130, 45, 84, 70, 
+                        DT_WORDBREAK
+    END
+END
+
+/** Data notification window *********************************************/ /*fold00*/
+
+DLGTEMPLATE ID_DLG_NOTIFY LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", ID_DLG_NOTIFY, 160, 104, 200, 40, WS_VISIBLE, FCF_TITLEBAR
+    BEGIN
+        CTEXT   "", WID_ST_NOTIFY, 4, 2, 192, 36, DT_WORDBREAK
+    END
+END
+
+/** Data renamer window **************************************************/ /*fold00*/
+
+DLGTEMPLATE ID_DLG_RENAMER LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Auto-rename files", ID_DLG_RENAMER, 52, 48, 270, 104, WS_VISIBLE, 
+            FCF_SYSMENU | FCF_TITLEBAR
+    BEGIN
+        GROUPBOX        "Rena~ming template", WID_NIL, 4, 76, 262, 24
+        ENTRYFIELD      "", WID_E_TEMPLATE, 12, 82, 246, 8, ES_MARGIN
+        GROUPBOX        "Options", WID_NIL, 4, 24, 262, 50
+        AUTOCHECKBOX    "~Limit length of names to not more than ...",
+                        WID_CB_LIMITLENGTH, 10, 54, 250, 10
+        SPINBUTTON      WID_SB_LENGTH, 24, 42, 38, 12, SPBS_MASTER | WS_GROUP
+        LTEXT           "characters", WID_NIL, 66, 42, 194, 8
+        AUTOCHECKBOX    "Replace ~spaces with underscores", WID_CB_REPLACESPACES,
+                        10, 28, 250, 10
+        DEFPUSHBUTTON   "~Rename", WID_PB_RENAME, 4, 4, 60, 16
+        PUSHBUTTON      "Cancel", WID_PB_CANCEL, 68, 4, 60, 16
+        PUSHBUTTON      "Help", WID_PB_HELP, 206, 4, 60, 16, BS_HELP | 
+                        BS_NOPOINTERFOCUS
+    END
+END
+
+ACCELTABLE ID_DLG_RENAMER PRELOAD
+BEGIN
+   "l",    WID_CB_LIMITLENGTH, CHAR, CONTROL
+   "s",    WID_CB_REPLACESPACES, CHAR, CONTROL
+   "r",    WID_PB_RENAME, CHAR, CONTROL
+   VK_ESC, WID_PB_CANCEL, VIRTUALKEY
+END
+
+/** File dialog window ***************************************************/ /*fold00*/
+
+DLGTEMPLATE ID_DLG_FILE LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", ID_DLG_FILE, 70, 22, 300, 145, WS_VISIBLE, FCF_SYSMENU | 
+            FCF_TITLEBAR
+    BEGIN
+        LTEXT           "~Filename", DID_FILENAME_TXT, 4, 127, 48, 12
+        ENTRYFIELD      "", DID_FILENAME_ED, 58, 131, 236, 8, ES_MARGIN
+        LTEXT           "~Type", DID_FILTER_TXT, 4, 114, 46, 12, DT_VCENTER
+        CONTROL         "", DID_FILTER_CB, 56, 81, 240, 45, WC_COMBOBOX, 
+                        CBS_DROPDOWNLIST | WS_GROUP | WS_TABSTOP | 
+                        WS_VISIBLE
+        LTEXT           "~Drives", DID_DRIVE_TXT, 4, 103, 34, 8
+        CONTROL         "", DID_DRIVE_CB, 4, 22, 34, 80, WC_COMBOBOX, 
+                        CBS_DROPDOWNLIST | WS_GROUP | WS_TABSTOP | 
+                        WS_VISIBLE
+        LTEXT           "Di~rectories", DID_DIRECTORY_TXT, 44, 103, 122, 8
+        LISTBOX         DID_DIRECTORY_LB, 44, 22, 122, 80, LS_NOADJUSTPOS | LS_OWNERDRAW | LS_HORZSCROLL
+        LTEXT           "~Files", DID_FILES_TXT, 172, 103, 124, 8
+        LISTBOX         DID_FILES_LB, 172, 22, 124, 80, LS_NOADJUSTPOS | 
+                        LS_HORZSCROLL
+        DEFPUSHBUTTON   "~Ok", DID_OK_PB, 4, 4, 50, 14
+        PUSHBUTTON      "~Cancel", DID_CANCEL_PB, 60, 4, 50, 14
+    END
+END
+
+/** String table *********************************************************/ /*fold00*/
+
+STRINGTABLE
+{
+    IDS_ERROR_GENREFILEHEADING              "GENRE FILE ERROR"
+    IDS_ERROR_COULDNOTOPENGENREFILE         "Could not open genre file '%s'. Error %d."
+
+    IDS_ERROR_HELPERHEADING                 "HELP ERROR"
+    IDS_ERROR_COULDNOTINITHELP              "Could not initialize online help."
+    IDS_ERROR_COULDNOTINITHELPFILE          "Could not initialize online help. Does helpfile '%s' exist in Minta's directory?"
+
+    IDS_ERROR_BORINGLISTHEADING             "THIS IS GONNA BE A BORING LIST ..."
+    IDS_ERROR_BORINGLIST                    "You must select at least one item to be included in the list."
+
+    IDS_ERROR_LISTFILEHEADING               "LISTFILE ERROR"
+    IDS_ERROR_MUSTGIVEVALIDLISTFILENAME     "You must give a valid listfile name."
+
+    IDS_ERROR_GENERALHEADING                "ERROR"
+    IDS_ERROR_WRONGGENREFOUND               "Wrong genre found for MP3 file."
+
+    IDS_SCANNINGFORMAT                      "Scanning - %s"
+    IDS_WRITINGFORMAT                       "Writing - %s"
+    IDS_IGNORINGFORMAT                      "Ignoring - %s"
+    IDS_SEARCHINGFORMAT                     "Searching - %s"
+    IDS_SAVINGFORMAT                        "Saving - %s"
+    IDS_RENAMINGFORMAT                      "Renaming - %s"
+    IDS_REMOVINGFORMAT                      "Removing - %s"
+
+    IDS_FILESWRITTENTOLISTHEADING           "FILES WRITTEN TO LIST"
+    IDS_FILESWRITTENTOLIST                  "All selected files have been written to the listfile '%s'."
+
+    IDS_ERROR_COULDNOTOPENLISTFILE          "Could not open the listfile '%s'."
+
+    IDS_SELECTLISTFILE                      "Select listfile"
+
+    IDS_LISTFILENAME                        "Filename"
+    IDS_LISTTITLE                           "Title"
+    IDS_LISTTIME                            "Time"
+    IDS_LISTARTIST                          "Artist"
+    IDS_LISTALBUM                           "Album"
+    IDS_LISTYEAR                            "Year"
+    IDS_LISTGENRE                           "Genre"
+    IDS_LISTCOMMENT                         "Comment"
+    IDS_LISTVERSION                         "Ver."
+    IDS_LISTLAYER                           "Layer"
+    IDS_LISTFREQUENCY                       "Freq."
+    IDS_LISTBITRATE                         "Bitrate"
+    IDS_LISTMODE                            "Mode"
+
+    IDS_ERROR_MP3FILEHEADING                "MP3 FILE ERROR"
+    IDS_ERROR_COULDNOTOPENMP3FILE           "Could not open MP3 file '%s'. Error %d."
+    IDS_ERROR_NOVALIDMP3FILE                "File '%s' seems not to be a valid MP3 file. If you modify it, you will act on your own risk ..."
+    IDS_ERROR_COULDNOTGETFILESIZE           "Could not get size of file."
+    IDS_ERROR_COULDNOTREMOVETAG             "Could not remove tag."
+
+    IDS_GENRENONE                           "(none)"
+    IDS_OPENMP3FILES                        "Open MP3 files"
+
+    IDS_NOFILENOTAG                         "No file, no tag!"
+    IDS_ID3TAGREADONLY                      "ID3-tag v%s (read only)"
+    IDS_ID3TAG                              "ID3-tag v%s"
+    IDS_FILEHASNOTAGREADONLY                "File has no ID3-tag (read only)"
+    IDS_FILEHASNOTAG                        "File has no ID3-tag"
+
+    IDS_NOFILESSELECTED                     "No files selected"
+    IDS_ONEFILESELECTED                     "1 file selected"
+    IDS_FILESSELECTED                       "%lu files selected"
+
+    IDS_FILESINSERTEDHEADING                "FILES INSERTED"
+    IDS_FILESWEREINSERTED                   "%ld new MP3 files from the directory and its subdirectories have been inserted into the list."
+    IDS_ONEFILEWASINSERTED                  "One new MP3 file has been found and was inserted into the list."
+    IDS_NOFILESFOUNDHEADING                 "NO NEW FILES FOUND"
+    IDS_NONEWFILESWEREFOUND                 "No new MP3 files could be found in the directory and its subdirectories."
+
+    IDS_ERROR_INIFILEHEADING                "INI FILE ERROR"
+    IDS_ERROR_NOOROLDINIFILE                "The INI-file's ('%s') version does not match the current version of Minta (or no INI-file was found) Defaults will be used."
+    IDS_ERROR_COULDNOTOPENINIFILE           "Could not open INI-file '%s'. Defaults will be used."
+
+    IDS_XOFX                                "%ld of %ld"
+    IDS_OK                                  "Ok"
+
+    IDS_REALLYSAVETAGSHEADING               "REALLY SAVE?"
+    IDS_REALLYSAVETAGS                      "Attach the current tag to all selected files?"
+
+    IDS_SAVEALL                             "Save all"
+    IDS_TAGSSAVEDHEADING                    "TAGS SAVED"
+    IDS_SOMETAGSSAVED                       "Tags have been saved for %ld selected files (The others probably were read only)"
+    IDS_ALLTAGSSAVED                        "Tags have been saved for all selected files."
+
+    IDS_REALLYRENAMEALLHEADING              "REALLY RENAME?"
+    IDS_REALLYRENAMEALL                     "Rename all files (with tag) to their Title?"
+    IDS_ERROR_RENAMINGFAILED                "Renaming of file '%s' failed: Error %d."
+
+    IDS_FILESRENAMEDHEADING                 "FILES RENAMED"
+    IDS_SOMEFILESRENAMED                    "%ld selected files have been renamed (The others probably had no tag)"
+    IDS_ALLFILESRENAMED                     "All selected files have been renamed."
+
+    IDS_REALLYREMOVETAGSHEADING             "REALLY REMOVE?"
+    IDS_REALLYREMOVETAGS                    "Really remove the tags of all selected files?"
+
+    IDS_TAGSREMOVEDHEADING                  "TAGS REMOVED"
+    IDS_SOMETAGSREMOVED                     "Tags have been removed from %ld selected files (The others probably were read only or had no tag)"
+    IDS_ALLTAGSREMOVED                      "Tags have been removed from all selected files."
+
+    IDS_TOTALTIME                           "Total time: "
+
+    IDS_UNKNOWN                             "Unknown"
+    IDS_NONE                                "None"
+
+    IDS_STEREO                              "Stereo"
+    IDS_JOINTSTEREO                         "Joint-Stereo"
+    IDS_DUALCHANNEL                         "Dual-Channel"
+    IDS_SINGLECHANNEL                       "Mono"
+
+    IDS_TITLE                               "Title"
+    IDS_TIME                                "Time"
+    IDS_ARTIST                              "Artist"
+    IDS_ALBUM                               "Album"
+    IDS_YEAR                                "Year"
+    IDS_GENRE                               "Genre"
+    IDS_COMMENT                             "Comment"
+    IDS_FILENAMEPATH                        "Filename & path"
+    IDS_VERSION                             "Version"
+    IDS_LAYER                               "Layer"
+    IDS_FREQUENCY                           "Frequency"
+    IDS_BITRATE                             "Bitrate"
+    IDS_MODE                                "Mode"
+
+    IDS_PAGENOTIFICATION                    "Notification"
+    IDS_PAGEKEEPINFO                        "Keep info"
+    IDS_PAGEMISC                            "Misc"
+    IDS_PAGELANGUAGE                        "Language"
+
+    IDS_ERROR_LAUNCHFAILED                  "Launching the MP3 player using '%s' failed. Error %d."
+    IDS_ERROR_GENREIDALREADYASSIGNED        "The id (%d) of the genre in line %d has already been assigned."
+
+    IDS_UNKNOWNGENRENAME                    "(unknown)"
+    IDS_ERROR_NOFILENODIR                   "'%s': No file, no directory, I'm a little bit confused! Error %d."
+
+    IDS_NOFILENOINFO                        "No file, no info!"
+    IDS_FILEINFOGROUPNAME                   "File information"
+    IDS_FILEINFOGROUPNAMEINVALID            "File information (probably incorrect)"
+
+    IDS_FILEHASUNSUPPORTEDTAG               "ID3-tag v%s (not supported yet)"
+}
+
+/*************************************************************************/

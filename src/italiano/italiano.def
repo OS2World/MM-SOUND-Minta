@@ -1,0 +1,8 @@
+;
+;       ITALIANO.DLL module definition file
+;
+
+LIBRARY  ITALIANO
+
+DESCRIPTION 'Italian-language resources for Minta.'
+

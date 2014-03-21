@@ -1,0 +1,8 @@
+;
+;       NORSK.DLL module definition file
+;
+
+LIBRARY  NORSK
+
+DESCRIPTION 'Norwegian-language resources for Minta.'
+

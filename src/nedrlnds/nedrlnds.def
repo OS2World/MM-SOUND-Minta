@@ -1,0 +1,8 @@
+;
+;       NEDRLNDS.DLL module definition file
+;
+
+LIBRARY  NEDRLNDS
+
+DESCRIPTION 'Dutch-language resources for Minta.'
+

@@ -1,0 +1,8 @@
+;
+;       ENGLISH.DLL module definition file
+;
+
+LIBRARY  ENGLISH
+
+DESCRIPTION 'English-language resources for Minta.'
+

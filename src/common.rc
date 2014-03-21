@@ -1,0 +1,132 @@
+/***
+ This file belongs to the Minta distribution.
+ Copyright (C) 1998-2003 Thorsten Thielen <thth@gmx.net>
+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ ***/
+
+#include <os2.h>
+
+#include "config.h"
+#include "id.h"
+#include "version.h"
+
+ICON 1 "src\\data\\minta.ico"
+BITMAP 1 "src\\data\\smile.bmp"
+
+/** Haupthilfstabelle ****************************************************/
+
+HELPTABLE MAIN_HELP_TABLE
+{
+    HELPITEM    ID_MAIN,            SUBTABLE_MAIN,         1000
+    HELPITEM    ID_DLG_LISTER,      SUBTABLE_LISTER,       2300
+    HELPITEM    ID_DLG_SETTINGS,    SUBTABLE_SETTINGS,     2200
+    HELPITEM    ID_DLG_RENAMER,     SUBTABLE_RENAMER,      2400
+}
+
+HELPSUBTABLE SUBTABLE_MAIN
+SUBITEMSIZE     2
+{
+    HELPSUBITEM    WID_DDL_FILES,    2110
+
+    HELPSUBITEM    WID_E_VERSION,    2120
+    HELPSUBITEM    WID_E_LAYER,      2120
+    HELPSUBITEM    WID_E_FREQUENCY,  2120
+    HELPSUBITEM    WID_E_BITRATE,    2120
+    HELPSUBITEM    WID_E_MODE,       2120
+    HELPSUBITEM    WID_E_TIME,       2120
+    HELPSUBITEM    WID_E_EMPHASIS,   2120
+
+    HELPSUBITEM    WID_CB_ORIGINAL,  2120
+    HELPSUBITEM    WID_CB_PRIVATE,   2120
+    HELPSUBITEM    WID_CB_COPYRIGHT, 2120
+    HELPSUBITEM    WID_CB_CRCS,      2120
+    HELPSUBITEM    WID_CB_PADDING,   2120
+
+    HELPSUBITEM    WID_E_TITLE,      2130
+    HELPSUBITEM    WID_E_ARTIST,     2130
+    HELPSUBITEM    WID_E_ALBUM,      2130
+    HELPSUBITEM    WID_E_YEAR,       2130
+    HELPSUBITEM    WID_E_COMMENT,    2130
+    HELPSUBITEM    WID_DDL_GENRE,    2130
+    HELPSUBITEM    WID_SB_TRACK,     2130
+
+    HELPSUBITEM    WID_PB_FILES,     2140
+    HELPSUBITEM    WID_PB_SAVE,      2140
+    HELPSUBITEM    WID_PB_SAVEALL,   2140
+    HELPSUBITEM    WID_PB_REMOVEALL, 2140
+    HELPSUBITEM    WID_PB_ABOUT,     2140
+    HELPSUBITEM    WID_PB_EXIT,      2140
+}
+
+HELPSUBTABLE SUBTABLE_LISTER
+SUBITEMSIZE     2
+{
+    HELPSUBITEM    WID_E_LISTFILENAME,  2300
+    HELPSUBITEM    WID_LB_INCLUDE,      2300
+    HELPSUBITEM    WID_CB_OUTPUTHEADER, 2300
+    HELPSUBITEM    WID_CB_OUTPUTTIME,   2300
+    HELPSUBITEM    WID_PB_OK,           2300
+    HELPSUBITEM    WID_PB_CANCEL,       2300
+}
+
+HELPSUBTABLE SUBTABLE_SETTINGS
+SUBITEMSIZE     2
+{
+    HELPSUBITEM    WID_CB_NOTIFYLOAD,   2210
+    HELPSUBITEM    WID_CB_NOTIFYSAVE,   2210
+    HELPSUBITEM    WID_CB_NOTIFYRENAME, 2210
+    HELPSUBITEM    WID_CB_NOTIFYLIST,   2210
+    HELPSUBITEM    WID_CB_NOTIFYREMOVE, 2210
+
+    HELPSUBITEM    WID_RB_CLICKAWAY,    2210
+    HELPSUBITEM    WID_RB_TIMER,        2210
+    HELPSUBITEM    WID_RB_BEEP,         2210
+
+    HELPSUBITEM    WID_CB_KEEP,         2220
+    HELPSUBITEM    WID_CB_KEEPTITLE,    2220
+    HELPSUBITEM    WID_CB_KEEPARTIST,   2220
+    HELPSUBITEM    WID_CB_KEEPALBUM,    2220
+    HELPSUBITEM    WID_CB_KEEPYEAR,     2220
+    HELPSUBITEM    WID_CB_KEEPGENRE,    2220
+    HELPSUBITEM    WID_CB_KEEPCOMMENT,  2220
+
+    HELPSUBITEM    WID_CB_ADJUSTTRACK,  2220
+    HELPSUBITEM    WID_CB_ONLYIFMISSING,2220
+
+    HELPSUBITEM    WID_E_GENRESFILE,    2230
+    HELPSUBITEM    WID_E_PLAYERCOMMAND, 2230
+
+    HELPSUBITEM    WID_CB_FILENAMETOTITLE,     2230
+    HELPSUBITEM    WID_CB_CUSTOMFILEDIALOG,    2230
+    HELPSUBITEM    WID_CB_NOINVALIDMP3WARNING, 2230
+    HELPSUBITEM    WID_CB_ONLYREADONLY,        2230
+
+    HELPSUBITEM    WID_LB_LANGUAGES,    2240
+
+    HELPSUBITEM    WID_PB_OK,           2200
+    HELPSUBITEM    WID_PB_UNDO,         2200
+}
+
+HELPSUBTABLE SUBTABLE_RENAMER
+SUBITEMSIZE     2
+{
+    HELPSUBITEM    WID_E_TEMPLATE,      2500
+    HELPSUBITEM    WID_CB_LIMITLENGTH,  2500
+    HELPSUBITEM    WID_SB_LENGTH,       2500
+    HELPSUBITEM    WID_CB_REPLACESPACES,2500
+    HELPSUBITEM    WID_PB_RENAME,       2500
+    HELPSUBITEM    WID_PB_CANCEL,       2500
+}

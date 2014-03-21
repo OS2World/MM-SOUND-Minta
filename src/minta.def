@@ -1,0 +1,3 @@
+NAME Minta WINDOWAPI
+DESCRIPTION "Minta, Copyright (c) 1998 Thorsten Thielen <thth@gmx.net>"
+STACKSIZE 0x8000

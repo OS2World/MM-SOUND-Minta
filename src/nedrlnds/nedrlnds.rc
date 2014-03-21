@@ -1,0 +1,599 @@
+/***
+ nedrlnds.rc - Nederlands bronbestand voor Minta
+ ***/
+
+/* Please do NOT try to translate the following statement :-) */
+RCINCLUDE "src\common.rc"
+
+/** Menu *****************************************************************/ /*fold00*/
+
+MENU ID_MAIN
+BEGIN
+  SUBMENU "B~estand", WID_MENU_FILES
+  BEGIN
+    MENUITEM "~Openen...\tAlt+O",        WID_PB_FILES
+    MENUITEM "~Automatisch openen...",          WID_PB_AUTOOPEN
+    MENUITEM SEPARATOR
+    MENUITEM "~Sluit huidig\tAlt+S", WID_PB_DELETEFROMLIST
+    MENUITEM "Sluit alle",             WID_PB_DELETEALLFROMLIST
+    MENUITEM SEPARATOR
+    MENUITEM "Hernoem alle",             WID_PB_RENAMEALL
+    MENUITEM "~Lijst...\tAlt+L",        WID_PB_LIST
+    MENUITEM SEPARATOR    
+    MENUITEM "Instellingen...",            WID_PB_SETTINGS
+    MENUITEM SEPARATOR    
+    MENUITEM "~Afsluiten\tAlt+F4",          WID_PB_EXIT
+  END
+  SUBMENU "~Tag", WID_MENU_TAG
+  BEGIN
+    MENUITEM "~Bewaar huidig",          WID_PB_SAVE
+    MENUITEM "Bewaar & vol~gende\tAlt+G",    WID_PB_SAVENEXT
+    MENUITEM "Bewaar & vo~rige\tAlt+R",WID_PB_SAVEPREV
+    MENUITEM "Bewaar alle",               WID_PB_SAVEALL
+    MENUITEM SEPARATOR
+    MENUITEM "~Verwijder huidig\tAlt+V", WID_PB_REMOVE
+    MENUITEM "Verwijder alle",             WID_PB_REMOVEALL
+  END                  
+  SUBMENU "~Extra", WID_MENU_TAG
+  BEGIN
+#ifdef _PLAYERCOMMAND_
+    MENUITEM "~Speel bestand",             WID_PB_PLAY
+#endif
+    MENUITEM "Toon ~knoppen",          WID_PB_SHOWBUTTONS,,MIA_CHECKED
+#ifdef _SHOWFILEINFO_
+    MENUITEM "Toon bestands~informatie",         WID_PB_SHOWFILEINFO,,MIA_CHECKED
+#endif
+#ifdef _TOOLBAR_
+    MENUITEM "Toon ~toolbar",          WID_PB_SHOWTOOLBAR,,MIA_CHECKED
+#endif
+  END                  
+  SUBMENU "~Help", 0, MIS_HELP
+  BEGIN
+    MENUITEM "Help ~inhoud...",      HM_HELP_CONTENTS
+    MENUITEM "Conte~xt help...",       HM_GENERAL_HELP,MIS_HELP
+    MENUITEM "Help ~algemeen...",       WID_MAIN_HELP
+//    MENUITEM "~Keys help...",          HM_KEYS_HELP
+    MENUITEM SEPARATOR
+    MENUITEM "~Produktinfo",   WID_PB_ABOUT
+  END
+END
+
+/** Data hoofdvenster ****************************************************/ /*fold00*/
+
+DLGTEMPLATE ID_MAIN LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  PSZ_NAMEVERSION, ID_MAIN, 82, 11, 382, 193, 0L,
+            FCF_SYSMENU | FCF_TITLEBAR | FCF_MINBUTTON | FCF_TASKLIST
+    BEGIN
+        GROUPBOX        "Geen bestanden geselecteerd", WID_G_FILES, 4, 156, 298, 24
+        CONTROL         "", WID_DDL_FILES, 12, 92, 282, 79, WC_COMBOBOX, 
+                        CBS_DROPDOWNLIST | WS_GROUP | WS_TABSTOP | 
+                        WS_VISIBLE
+
+        GROUPBOX        "", WID_G_FILEINFO, 4, 80, 298, 72
+
+        RTEXT           "Versie:", WID_ST_VERSION, 10, 132, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_VERSION, 76, 134, 76, 8, ES_MARGIN | ES_AUTOTAB | 
+                        ES_READONLY
+        RTEXT           "Layer:", WID_ST_LAYER, 10, 120, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_LAYER, 76, 122, 76, 8, ES_MARGIN | ES_AUTOTAB | 
+                        ES_READONLY
+        RTEXT           "Frequentie:", WID_ST_FREQUENCY, 10, 108, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_FREQUENCY, 76, 110, 76, 8, ES_MARGIN | ES_AUTOTAB | 
+                        ES_READONLY
+        RTEXT           "Bitrate:", WID_ST_BITRATE, 10, 96, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_BITRATE, 76, 98, 76, 8, ES_MARGIN | ES_AUTOTAB | 
+                        ES_READONLY
+        RTEXT           "Modus:", WID_ST_MODE, 10, 84, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_MODE, 76, 86, 76, 8, ES_MARGIN | ES_AUTOTAB | 
+                        ES_READONLY
+
+        CHECKBOX        "Origineel", WID_CB_ORIGINAL, 166, 134, 62, 10
+        CHECKBOX        "Privaat", WID_CB_PRIVATE, 166, 124, 62, 10
+        CHECKBOX        "Copyright", WID_CB_COPYRIGHT, 166, 114, 62, 10
+        CHECKBOX        "CRCs", WID_CB_CRCS, 232, 134, 62, 10
+        CHECKBOX        "Padding", WID_CB_PADDING, 232, 124, 62, 10
+
+        RTEXT           "Emphasis:", WID_ST_EMPHASIS, 166, 96, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_EMPHASIS, 232, 98, 60, 8, ES_MARGIN | ES_AUTOTAB | 
+                        ES_READONLY
+        RTEXT           "Speelduur:", WID_ST_TIME, 166, 84, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_TIME, 232, 86, 60, 8, ES_MARGIN | ES_AUTOTAB | 
+                        ES_READONLY
+
+        GROUPBOX        "Tag-informatie", WID_G_TAG, 4, 4, 298, 72
+
+        RTEXT           "Titel:", WID_ST_TITLE, 10, 56, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_TITLE, 76, 58, 216, 8, ES_MARGIN
+        RTEXT           "Artiest:", WID_ST_ARTIST, 10, 44, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_ARTIST, 76, 46, 216, 8, ES_MARGIN
+        RTEXT           "Album:", WID_ST_ALBUM, 10, 32, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_ALBUM, 76, 34, 216, 8, ES_MARGIN
+        RTEXT           "Jaar:", WID_ST_YEAR, 10, 20, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_YEAR, 76, 22, 46, 8, ES_MARGIN
+        RTEXT           "Genre:", WID_ST_GENRE, 128, 20, 60, 12, DT_VCENTER
+        CONTROL         "", WID_DDL_GENRE, 192, 0, 102, 32, WC_COMBOBOX, 
+                        CBS_DROPDOWNLIST | WS_GROUP | WS_TABSTOP | 
+                        WS_VISIBLE
+        RTEXT           "Opmerking:", WID_ST_COMMENT, 10, 8, 60, 12, DT_VCENTER
+        ENTRYFIELD      "", WID_E_COMMENT, 76, 10, 126, 8, ES_MARGIN
+        RTEXT           "Track #", WID_ST_TRACK, 216, 8, 34, 12, DT_VCENTER
+        SPINBUTTON      WID_SB_TRACK, 254, 9, 40, 12,
+        		SPBS_NUMERICONLY | SPBS_MASTER | SPBS_JUSTRIGHT |
+                        WS_GROUP
+
+        PUSHBUTTON      "~Openen...", WID_PB_FILES, 310, 162, 66, 15
+        PUSHBUTTON      "~Bewaar", WID_PB_SAVE, 310, 140, 66, 15
+        PUSHBUTTON      "Bewaar alle", WID_PB_SAVEALL, 310, 124, 66, 15
+        PUSHBUTTON      "~Verwijder", WID_PB_REMOVE, 310, 102, 66, 15
+        PUSHBUTTON      "Verwijder alle", WID_PB_REMOVEALL, 310, 86, 66, 15
+        PUSHBUTTON      "~Lijst...", WID_PB_LIST, 310, 64, 66, 15
+        PUSHBUTTON      "~Info", WID_PB_ABOUT, 310, 42, 66, 15
+        PUSHBUTTON      "~Afsluiten", WID_PB_EXIT, 310, 4, 66, 15
+        PUSHBUTTON      "Help", WID_PB_HELP, 310, 26, 66, 15, BS_HELP | 
+                        BS_NOPOINTERFOCUS
+    END
+END
+
+ACCELTABLE ID_MAIN PRELOAD
+BEGIN
+   "x",    WID_PB_EXIT, CHAR, ALT
+   "o",    WID_PB_FILES, CHAR, ALT
+   "b",    WID_PB_SAVE, CHAR, ALT
+   "v",    WID_PB_REMOVE, CHAR, ALT
+   "i",    WID_PB_ABOUT, CHAR, ALT
+   "l",    WID_PB_LIST, CHAR, ALT
+   VK_F4,  WID_PB_EXIT, VIRTUALKEY, ALT
+   "g",    WID_PB_SAVENEXT, CHAR, ALT
+   "r",    WID_PB_SAVEPREV, CHAR, ALT
+   "+",    WID_PB_SAVENEXT, CHAR, ALT
+   "-",    WID_PB_SAVEPREV, CHAR, ALT
+   "s",    WID_PB_DELETEFROMLIST, CHAR, ALT
+
+   ".",    WID_PB_TEST, CHAR, ALT
+END
+
+/** Data lijst dialoogvenster ********************************************/ /*fold00*/
+
+#ifdef _NEWLISTER_
+
+DLGTEMPLATE ID_DLG_LISTER LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Lijst samenstellen", ID_DLG_LISTER, 78, 57, 300, 110, WS_VISIBLE,
+            FCF_SYSMENU | FCF_TITLEBAR
+    BEGIN
+        GROUPBOX        "Doelbestand", WID_NIL, 4, 82, 292, 25
+        ENTRYFIELD      "", WID_E_LISTFILENAME, 12, 88, 228, 8, ES_MARGIN
+        PUSHBUTTON      "~Zoeken...", WID_PB_FIND, 246, 86, 44, 12
+
+        GROUPBOX        "Gewenste informatie", WID_NIL, 4, 22, 146, 58
+        LISTBOX         WID_LB_INCLUDE, 10, 27, 132, 44, LS_MULTIPLESEL
+
+        GROUPBOX        "Opties", WID_NIL, 156, 22, 140, 58
+        AUTOCHECKBOX    "~Hoofding toevoegen", WID_CB_OUTPUTHEADER,
+                        162, 59, 128, 10
+        AUTOCHECKBOX    "~Totale speelduur toevoegen", WID_CB_OUTPUTTIME,
+                        162, 48, 128, 10
+        AUTOCHECKBOX    "~Automatische kolombreedte", WID_CB_AUTOSIZE,
+                        162, 37, 128, 10
+        AUTOCHECKBOX    "~Enkel bestanden met tag", WID_CB_ONLYTAGGED,
+                        162, 26, 128, 10
+
+        DEFPUSHBUTTON   "~Ok", WID_PB_OK, 4, 3, 50, 14
+        PUSHBUTTON      "Afbreken", WID_PB_CANCEL, 60, 3, 50, 14
+        PUSHBUTTON      "Help", WID_NIL, 246, 3, 50, 14, BS_HELP | 
+                        BS_NOPOINTERFOCUS
+    END
+END
+
+ACCELTABLE ID_DLG_LISTER PRELOAD
+BEGIN
+   "z",    WID_PB_FIND, CHAR, CONTROL
+   "t",    WID_CB_OUTPUTTIME, CHAR, CONTROL
+   "h",    WID_CB_OUTPUTHEADER, CHAR, CONTROL
+   "a",    WID_CB_AUTOSIZE, CHAR, CONTROL
+   "e",    WID_CB_ONLYTAGGED, CHAR, CONTROL
+   "o",    WID_PB_OK, CHAR, CONTROL
+   VK_ESC, WID_PB_CANCEL, VIRTUALKEY
+END
+
+#endif
+
+/** Data productinformatievenster ****************************************/ /*FOLD00*/
+
+DLGTEMPLATE ID_DLG_ABOUT LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Over ""Minta""", ID_DLG_ABOUT, 90, 56, 250, 80, WS_VISIBLE, 
+            FCF_SYSMENU | FCF_TITLEBAR
+    BEGIN
+        ICON            1, ID_MAIN, 8, 58, 21, 16, WS_GROUP
+        LTEXT           PSZ_NAMEVERSION, WID_NIL, 42, 64, 202, 9
+                        PRESPARAMS PP_FOREGROUNDCOLOR, 0x00C80A0AL
+        LTEXT           "MP3 informatie-, tag- & lijst-utility",
+                        WID_NIL, 42, 53, 202, 8
+        LTEXT           "Auteursrecht ¸ 1998-2002 Thorsten Thielen", WID_NIL, 42, 44, 
+                        202, 8
+        LTEXT           "Internet: thth@gmx.net", WID_NIL, 42, 32, 202, 8
+        LTEXT           "WWW: http://www.teamos2.ipcon.de/~thielen/programs/minta",
+                        WID_NIL, 42, 13, 202, 17, DT_WORDBREAK
+        LTEXT           "Nederlandse vertaling: Luc Van Bogaert", WID_NIL,
+                        42, 4, 202, 8
+        DEFPUSHBUTTON   "Ok", WID_NIL, 8, 4, 22, 26
+    END
+END
+
+/** Data zoek in directory venster ***************************************/ /*fold00*/
+
+DLGTEMPLATE ID_DLG_FINDDIR LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Zoek in directory", ID_DLG_FINDDIR, 116, 32, 200, 150,
+    	    WS_VISIBLE, FCF_SYSMENU | FCF_TITLEBAR
+    BEGIN
+        LTEXT           "~Drive:", WID_NIL, 6, 139, 188, 8, DT_MNEMONIC
+        CONTROL         "", WID_LB_DRIVES, 6, 88, 188, 50, WC_COMBOBOX, 
+                        CBS_DROPDOWNLIST | WS_GROUP | WS_TABSTOP | 
+                        WS_VISIBLE
+        LTEXT           "D~irectories:", WID_NIL, 6, 115, 188, 8, DT_MNEMONIC
+        LISTBOX         WID_LB_DIRECTORIES, 6, 33, 188, 80
+        LTEXT           "", WID_ST_PATH, 6, 22, 188, 8
+        DEFPUSHBUTTON   "~Ok", DID_OK, 4, 4, 45, 14
+        PUSHBUTTON      "Afbreken", DID_CANCEL, 53, 4, 45, 14
+    END
+END
+
+ACCELTABLE ID_ACCELTABLE_FINDDIR
+BEGIN
+        "o", DID_OK, CONTROL
+        "i", WID_LB_DIRECTORIES, CONTROL
+        "d", WID_LB_DRIVES, CONTROL
+        VK_ESC, DID_CANCEL, VIRTUALKEY
+END
+
+/** Data statusvenster ***************************************************/ /*fold00*/
+
+DLGTEMPLATE ID_DLG_STATUS LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", ID_DLG_STATUS, 200, 200, 288, 74, WS_VISIBLE, FCF_SYSMENU | 
+            FCF_TITLEBAR
+    BEGIN
+        GROUPBOX        "Bewerken bestand", WID_NIL, 4, 46, 280, 24
+        ENTRYFIELD      "", WID_E_FILE, 12, 52, 264, 8, ES_MARGIN | ES_READONLY
+        GROUPBOX        "Status", WID_NIL, 4, 22, 280, 22
+        SLIDER          WID_S_PROGRESS, 8, 26, 200, 10, SLS_READONLY | SLS_RIBBONSTRIP | 
+                        WS_GROUP
+                        CTLDATA 12, 0, 100, 0, 0, 0
+        CTEXT           "1234 of 1234", WID_ST_COUNT, 210, 26, 68, 10, DT_VCENTER
+        PUSHBUTTON      "Stop", WID_PB_OK, 4, 4, 50, 14
+    END
+END
+
+/** Data instellingenvenster *********************************************/ /*fold00*/
+
+#ifdef _NEWSETTINGS_
+
+DLGTEMPLATE ID_DLG_SETTINGS LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Minta instellingen", ID_DLG_SETTINGS, 104, 26, 280, 186, 0L,
+            FCF_SYSMENU | FCF_TITLEBAR
+    BEGIN
+        NOTEBOOK        WID_NB_SETTINGS, 5, 21, 270, 160, BKS_BACKPAGESTR | 
+                        BKS_MAJORTABTOP | BKS_ROUNDEDTABS | 
+                        BKS_TABTEXTCENTER | BKS_SPIRALBIND | WS_GROUP |
+                        BKS_TABBEDDIALOG
+        DEFPUSHBUTTON   "~Ok", WID_PB_OK, 5, 4, 60, 14
+        PUSHBUTTON      "~Annuleren", WID_PB_UNDO, 70, 4, 60, 14
+        PUSHBUTTON      "Help", WID_NIL, 215, 4, 60, 14, BS_HELP | 
+                        BS_NOPOINTERFOCUS
+    END
+END
+
+DLGTEMPLATE ID_DLG_SETTINGSPAGE1 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", ID_DLG_SETTINGSPAGE1, 10, 10, 220, 120, NOT FS_DLGBORDER | 
+            WS_VISIBLE
+    BEGIN
+        GROUPBOX        "Meld mij wanneer ...", WID_NIL, 5, 51, 210, 64
+        AUTOCHECKBOX    "bestanden geopend werden", WID_CB_NOTIFYLOAD,
+        		11, 95, 198, 10
+        AUTOCHECKBOX    "tags van bestanden verwijderd werden", WID_CB_NOTIFYREMOVE,
+        		11, 85, 198, 10
+        AUTOCHECKBOX    "tags van bestanden bewaard werden", WID_CB_NOTIFYSAVE,
+        		11, 75, 198, 10
+        AUTOCHECKBOX    "bestanden naar een lijst geschreven werden", WID_CB_NOTIFYLIST,
+        		11, 65, 198, 10
+        AUTOCHECKBOX    "bestanden hernoemd werden", WID_CB_NOTIFYRENAME,
+        		11, 55, 198, 10
+        GROUPBOX        "Soort melding", WID_NIL, 5, 5, 210, 42
+// Note: You do not need to translate the following word by word :-)
+        AUTORADIOBUTTON "Dialoogvenster met bevestiging", WID_RB_CLICKAWAY,
+        		11, 28, 198, 10, WS_TABSTOP | WS_GROUP
+        AUTORADIOBUTTON "Tijdsgestuurd dialoogvenster", WID_RB_TIMER,
+        		11, 18, 198, 10, WS_TABSTOP
+        AUTORADIOBUTTON "Geluidssignaal", WID_RB_BEEP,
+        		11, 8, 198, 10, WS_TABSTOP
+    END
+END
+
+DLGTEMPLATE ID_DLG_SETTINGSPAGE2 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", ID_DLG_SETTINGSPAGE2, 10, 10, 220, 120, NOT FS_DLGBORDER | 
+            WS_VISIBLE
+    BEGIN
+        AUTOCHECKBOX    "Behoud tag-info bij wisselen van bestanden",
+        		WID_CB_KEEP, 11, 101, 200, 10
+        GROUPBOX        "Behoud ...", WID_NIL, 5, 53, 210, 44
+        AUTOCHECKBOX    "Titel", WID_CB_KEEPTITLE, 11, 77, 90, 10
+        AUTOCHECKBOX    "Artiest", WID_CB_KEEPARTIST, 117, 77, 90, 10
+        AUTOCHECKBOX    "Album", WID_CB_KEEPALBUM, 11, 67, 90, 10
+        AUTOCHECKBOX    "Jaar", WID_CB_KEEPYEAR, 117, 67, 90, 10
+        AUTOCHECKBOX    "Genre", WID_CB_KEEPGENRE, 11, 57, 90, 10
+        AUTOCHECKBOX    "Opmerking", WID_CB_KEEPCOMMENT, 117, 57, 90, 10
+        GROUPBOX        "Opties", WID_NIL, 5, 5, 210, 44
+        AUTOCHECKBOX    "Tracknummer verhogen/verlagen",
+        		WID_CB_ADJUSTTRACK, 11, 29, 198,  10
+        AUTOCHECKBOX    "Info enkel behouden indien niet aanwezig",
+        		WID_CB_ONLYIFMISSING, 11,19, 198, 10
+    END
+END
+
+DLGTEMPLATE ID_DLG_SETTINGSPAGE3 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", ID_DLG_SETTINGSPAGE3, 10, 10, 220, 120, NOT FS_DLGBORDER | 
+            WS_VISIBLE
+    BEGIN
+#ifdef _LOADGENRES_
+        GROUPBOX        "Haal genres uit bestand ...", WID_NIL, 5, 92, 210, 23
+        ENTRYFIELD      "", WID_E_GENRESFILE, 13, 97, 194, 8, ES_MARGIN
+#endif
+#ifdef _PLAYERCOMMAND_
+        GROUPBOX        "Speler opdrachtregel", WID_NIL, 5, 65, 210, 23
+        ENTRYFIELD      "", WID_E_PLAYERCOMMAND, 13, 70, 194, 8, ES_MARGIN
+#endif
+        GROUPBOX        "Meer opties", WID_NIL, 5, 5, 210, 56
+#ifdef _FILENAMETOTITLE_
+        AUTOCHECKBOX    "Bestandsnaam is Titel indien geen Titelinfo",
+        		WID_CB_FILENAMETOTITLE, 11, 42, 198, 10
+#endif
+/*        AUTOCHECKBOX    "Max. 31 tekens bij automatisch hernoemen",
+        		WID_CB_LIMITRENAME, 11, 32, 198, 10*/
+        AUTOCHECKBOX    "Aangepast bestandsdialoogvenster",
+        		WID_CB_CUSTOMFILEDIALOG, 11, 32, 198, 10
+        AUTOCHECKBOX    "Geen melding bij ongeldig bestand",
+        		WID_CB_NOINVALIDMP3WARNING, 11, 22, 198, 10
+    	AUTOCHECKBOX    "Read-only: alleen invulvelden read-only",
+        		WID_CB_ONLYREADONLY, 11, 12, 198, 10
+END
+END
+
+DLGTEMPLATE ID_DLG_SETTINGSPAGE4 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", ID_DLG_SETTINGSPAGE4, 10, 10, 220, 120, NOT FS_DLGBORDER | 
+            WS_VISIBLE
+    BEGIN
+        GROUPBOX        "Kies een taal", WID_NIL, 5, 5, 119, 111
+        LISTBOX         WID_LB_LANGUAGES, 11, 66, 106, 40, LS_NOADJUSTPOS
+        GROUPBOX        "Helpbestand", WID_NIL, 5, 5, 119, 54
+        LISTBOX         WID_LB_LANGUAGESHELP, 11, 9, 106, 40, LS_NOADJUSTPOS
+        CONTROL         1, 1, 130, 5, 84, 36, WC_STATIC, SS_BITMAP | 
+                        WS_GROUP | WS_VISIBLE
+        LTEXT           "Opmerking: Deze instelling wordt pas aktief "
+                        "na de volgende programmastart.",
+                        WID_ST_LANGNOTE, 130, 45, 84, 70, 
+                        DT_WORDBREAK
+    END
+END
+
+#endif
+
+/** Data meldingenvenster ************************************************/ /*fold00*/
+
+DLGTEMPLATE ID_DLG_NOTIFY LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", ID_DLG_NOTIFY, 160, 104, 200, 40, WS_VISIBLE, FCF_TITLEBAR
+    BEGIN
+        CTEXT   "", WID_ST_NOTIFY, 4, 2, 192, 36, DT_WORDBREAK
+    END
+END
+
+/** Data hernoemen venster **************************************************/ /*fold00*/
+
+DLGTEMPLATE ID_DLG_RENAMER LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Bestanden automatisch hernoemen", ID_DLG_RENAMER, 52, 48, 270, 104, WS_VISIBLE, 
+            FCF_SYSMENU | FCF_TITLEBAR
+    BEGIN
+        GROUPBOX        "Hernoe~men template", WID_NIL, 4, 76, 262, 24
+        ENTRYFIELD      "", WID_E_TEMPLATE, 12, 82, 246, 8, ES_MARGIN
+        GROUPBOX        "Opties", WID_NIL, 4, 24, 262, 50
+        AUTOCHECKBOX    "~Beperk lengte van bestandsnamen tot ...",
+                        WID_CB_LIMITLENGTH, 10, 54, 250, 10
+        SPINBUTTON      WID_SB_LENGTH, 24, 42, 38, 12, SPBS_MASTER | WS_GROUP
+        LTEXT           "tekens", WID_NIL, 66, 42, 194, 8
+        AUTOCHECKBOX    "Vervang ~spaties door onderlijning", WID_CB_REPLACESPACES,
+                        10, 28, 250, 10
+        DEFPUSHBUTTON   "~Hernoem", WID_PB_RENAME, 4, 4, 60, 16
+        PUSHBUTTON      "Afbreken", WID_PB_CANCEL, 68, 4, 60, 16
+        PUSHBUTTON      "Help", WID_PB_HELP, 206, 4, 60, 16, BS_HELP | 
+                        BS_NOPOINTERFOCUS
+    END
+END
+
+ACCELTABLE ID_DLG_RENAMER PRELOAD
+BEGIN
+   "b",    WID_CB_LIMITLENGTH, CHAR, CONTROL
+   "s",    WID_CB_REPLACESPACES, CHAR, CONTROL
+   "h",    WID_PB_RENAME, CHAR, CONTROL
+   VK_ESC, WID_PB_CANCEL, VIRTUALKEY
+END
+
+DLGTEMPLATE ID_DLG_FILE LOADONCALL MOVEABLE DISCARDABLE /*fold00*/
+BEGIN
+    DIALOG  "", ID_DLG_FILE, 70, 22, 300, 145, WS_VISIBLE, FCF_SYSMENU | 
+            FCF_TITLEBAR
+    BEGIN
+        LTEXT           "~Bestandsnaam", DID_FILENAME_TXT, 4, 127, 48, 12
+        ENTRYFIELD      "", DID_FILENAME_ED, 58, 131, 236, 8, ES_MARGIN
+        LTEXT           "~Type", DID_FILTER_TXT, 4, 114, 46, 12, DT_VCENTER
+        CONTROL         "", DID_FILTER_CB, 56, 81, 240, 45, WC_COMBOBOX, 
+                        CBS_DROPDOWNLIST | WS_GROUP | WS_TABSTOP | 
+                        WS_VISIBLE
+        LTEXT           "~Drives", DID_DRIVE_TXT, 4, 103, 34, 8
+        CONTROL         "", DID_DRIVE_CB, 4, 22, 34, 80, WC_COMBOBOX, 
+                        CBS_DROPDOWNLIST | WS_GROUP | WS_TABSTOP | 
+                        WS_VISIBLE
+        LTEXT           "Di~rectories", DID_DIRECTORY_TXT, 44, 103, 122, 8
+        LISTBOX         DID_DIRECTORY_LB, 44, 22, 122, 80, LS_NOADJUSTPOS | LS_OWNERDRAW | LS_HORZSCROLL
+        LTEXT           "Bes~tanden", DID_FILES_TXT, 172, 103, 124, 8
+        LISTBOX         DID_FILES_LB, 172, 22, 124, 80, LS_NOADJUSTPOS | 
+                        LS_HORZSCROLL
+        DEFPUSHBUTTON   "~Ok", DID_OK_PB, 4, 4, 50, 14
+        PUSHBUTTON      "~Afbreken", DID_CANCEL_PB, 60, 4, 50, 14
+    END
+END
+
+/** String tabel *********************************************************/ /*fold00*/
+
+STRINGTABLE
+{
+    IDS_ERROR_GENREFILEHEADING              "GENRE-BESTAND FOUT"
+    IDS_ERROR_COULDNOTOPENGENREFILE         "Genrebestand '%s' niet geopend. Fout %d."
+
+    IDS_ERROR_HELPERHEADING                 "HELP FOUT"
+    IDS_ERROR_COULDNOTINITHELP              "Helptekst niet ge‹nitialiseerd."
+    IDS_ERROR_COULDNOTINITHELPFILE          "Helptekst niet ge‹nitialiseerd. Is helpbestand '%s' aanwezig in Minta directory?"
+
+    IDS_ERROR_BORINGLISTHEADING             "DIT WORDT EEN SAAIE LIJST ..."
+    IDS_ERROR_BORINGLIST                    "U dient ten minste 1 item voor de lijst te selecteren."
+
+    IDS_ERROR_LISTFILEHEADING               "LIJSTBESTAND FOUT"
+    IDS_ERROR_MUSTGIVEVALIDLISTFILENAME     "Geef een geldige lijstbestandsnaam op."
+
+    IDS_ERROR_GENERALHEADING                "FOUT"
+    IDS_ERROR_WRONGGENREFOUND               "Ongeldig genre voor MP3-bestand gevonden."
+
+    IDS_SCANNINGFORMAT                      "Scannen - %s"
+    IDS_WRITINGFORMAT                       "Schrijven - %s"
+    IDS_IGNORINGFORMAT                      "Negeren - %s"
+    IDS_SEARCHINGFORMAT                     "Zoeken - %s"
+    IDS_SAVINGFORMAT                        "Bewaren - %s"
+    IDS_RENAMINGFORMAT                      "Hernoemen - %s"
+    IDS_REMOVINGFORMAT                      "Verwijderen - %s"
+
+    IDS_FILESWRITTENTOLISTHEADING           "BESTANDEN AAN LIJST TOEGEVOEGD"
+    IDS_FILESWRITTENTOLIST                  "Alle geselecteerde bestanden werden toegevoegd aan lijstbestand '%s'."
+
+    IDS_ERROR_COULDNOTOPENLISTFILE          "Kan lijstbestand '%s' niet openen."
+
+    IDS_SELECTLISTFILE                      "Selecteer lijstbestand"
+
+    IDS_LISTFILENAME                        "Bestandsnaam"
+    IDS_LISTTITLE                           "Titel"
+    IDS_LISTTIME                            "Speelduur"
+    IDS_LISTARTIST                          "Artiest"
+    IDS_LISTALBUM                           "Album"
+    IDS_LISTYEAR                            "Jaar"
+    IDS_LISTGENRE                           "Genre"
+    IDS_LISTCOMMENT                         "Opmerking"
+    IDS_LISTVERSION                         "Ver."
+    IDS_LISTLAYER                           "Layer"
+    IDS_LISTFREQUENCY                       "Freq."
+    IDS_LISTBITRATE                         "Bitrate"
+    IDS_LISTMODE                            "Modus"
+
+    IDS_ERROR_MP3FILEHEADING                "MP3-BESTAND FOUT"
+    IDS_ERROR_COULDNOTOPENMP3FILE           "Kan MP3-bestand '%s' niet openen Fout %d."
+    IDS_ERROR_NOVALIDMP3FILE                "Bestand '%s' lijkt een ongeldig MP3-bestand. Bewerk dit bestand op eigen risico ..."
+    IDS_ERROR_COULDNOTGETFILESIZE           "Kan bestandsgrootte niet bepalen."
+    IDS_ERROR_COULDNOTREMOVETAG             "Kan tag niet verwijderen."
+
+    IDS_GENRENONE                           "(geen)"
+    IDS_OPENMP3FILES                        "Open MP3-bestanden"
+
+    IDS_NOFILENOTAG                         "Geen bestand, geen tag!"
+    IDS_ID3TAGREADONLY                      "ID3-tag v%s (read-only)"
+    IDS_ID3TAG                              "ID3-tag v%s"
+    IDS_FILEHASNOTAGREADONLY                "Bestand heeft geen ID3-tag (read-only)"
+    IDS_FILEHASNOTAG                        "Bestand heeft geen ID3-tag"
+
+    IDS_NOFILESSELECTED                     "geen bestanden geselecteerd"
+    IDS_ONEFILESELECTED                     "1 bestand geselecteerd"
+    IDS_FILESSELECTED                       "%lu bestanden geselecteerd"
+
+    IDS_FILESINSERTEDHEADING                "BESTANDEN TOEGEVOEGD"
+    IDS_FILESWEREINSERTED                   "%ld nieuwe MP3-bestanden uit de directory en subdirectories werden aan de lijst toegevoegd."
+    IDS_ONEFILEWASINSERTED                  "1 nieuw MP3-bestand gevonden en aan de lijst toegevoegd."
+    IDS_NOFILESFOUNDHEADING                 "GEEN NIEUWE BESTANDEN GEVONDEN"
+    IDS_NONEWFILESWEREFOUND                 "Geen nieuwe MP3-bestanden gevonden in de directory en subdirectories."
+
+    IDS_ERROR_INIFILEHEADING                "INI-BESTAND FOUT"
+    IDS_ERROR_NOOROLDINIFILE                "Versie van het INI-bestand ('%s') past niet bij de huidige versie van Minta (of het INI-bestand werd niet gevonden). Gebruik standaardinstellingen."
+    IDS_ERROR_COULDNOTOPENINIFILE           "Kan INI-bestand '%s' niet openen. Gebruik standaardinstellingen."
+
+    IDS_XOFX                                "%ld van %ld"
+    IDS_OK                                  "Ok"
+
+    IDS_REALLYSAVETAGSHEADING               "ZEKER BEWAREN?"
+    IDS_REALLYSAVETAGS                      "Huidige tag toevoegen aan alle geselecteerde bestanden?"
+
+    IDS_SAVEALL                             "Bewaar alle"
+    IDS_TAGSSAVEDHEADING                    "TAGS BEWAARD"
+    IDS_SOMETAGSSAVED                       "Tags van %ld geselecteerde bestanden bewaard (De andere waren waarschijnlijk read-only)"
+    IDS_ALLTAGSSAVED                        "Tags van alle geselecteerde bestanden bewaard."
+
+    IDS_REALLYRENAMEALLHEADING              "ZEKER HERNOEMEN?"
+    IDS_REALLYRENAMEALL                     "Alle bestanden (met tag) hernoemen naar hun Titel?"
+    IDS_ERROR_RENAMINGFAILED                "Hernoemen bestand '%s' gefaald: Fout %d."
+
+    IDS_FILESRENAMEDHEADING                 "BESTANDEN HERNOEMD"
+    IDS_SOMEFILESRENAMED                    "%ld geselecteerde bestanden hernoemd (De andere hadden waarschijnlijk geen tag)"
+    IDS_ALLFILESRENAMED                     "Alle geselecteerde bestanden hernoemd."
+
+    IDS_REALLYREMOVETAGSHEADING             "ZEKER VERWIJDEREN?"
+    IDS_REALLYREMOVETAGS                    "Tags verwijderen van alle geselecteerde bestanden?"
+
+    IDS_TAGSREMOVEDHEADING                  "TAGS VERWIJDERD"
+    IDS_SOMETAGSREMOVED                     "Tags van %ld geselecteerde bestanden verwijderd (De andere hadden waarschijnlijk geen tag of waren read-only)"
+    IDS_ALLTAGSREMOVED                      "Tags van alle geselecteerde bestanden verwijderd."
+
+    IDS_TOTALTIME                           "Totale speelduur: "
+
+    IDS_UNKNOWN                             "Onbekend"
+    IDS_NONE                                "Geen"
+
+    IDS_STEREO                              "Stereo"
+    IDS_JOINTSTEREO                         "Joint-Stereo"
+    IDS_DUALCHANNEL                         "Dual-Channel"
+    IDS_SINGLECHANNEL                       "Mono"
+
+    IDS_TITLE                               "Titel"
+    IDS_TIME                                "Speelduur"
+    IDS_ARTIST                              "Artiest"
+    IDS_ALBUM                               "Album"
+    IDS_YEAR                                "Jaar"
+    IDS_GENRE                               "Genre"
+    IDS_COMMENT                             "Opmerking"
+    IDS_FILENAMEPATH                        "Bestandsnaam & pad"
+    IDS_VERSION                             "Versie"
+    IDS_LAYER                               "Layer"
+    IDS_FREQUENCY                           "Frequentie"
+    IDS_BITRATE                             "Bitrate"
+    IDS_MODE                                "Modus"
+
+    IDS_PAGENOTIFICATION                    "Meldingen"
+    IDS_PAGEKEEPINFO                        "Info Behouden"
+    IDS_PAGEMISC                            "Diversen"
+    IDS_PAGELANGUAGE                        "Taal"
+
+    IDS_ERROR_LAUNCHFAILED                  "Starten van de MP3-speler met '%s' gefaald. Fout %d."
+    IDS_ERROR_GENREIDALREADYASSIGNED        "id (%d) van het genre op lijn %d werd reeds toegewezen."
+
+    IDS_UNKNOWNGENRENAME                    "(onbekend)"
+    IDS_ERROR_NOFILENODIR                   "'%s': Geen bestand, geen directory, dit is wat verwarrend! Fout %d."
+
+    IDS_NOFILENOINFO                        "Geen bestand, geen informatie!"
+    IDS_FILEINFOGROUPNAME                   "Bestandsinformatie"
+    IDS_FILEINFOGROUPNAMEINVALID            "Bestandsinformatie (waarschijnlijk niet correct)"
+    IDS_FILEHASUNSUPPORTEDTAG               "ID3-tag v%s (nog niet ondersteund)"
+}
+
+/*************************************************************************/

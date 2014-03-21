@@ -1,0 +1,8 @@
+;
+;       RUSSIAN.DLL module definition file
+;
+
+LIBRARY  RUSSIAN
+
+DESCRIPTION 'Russian-language resources for Minta.'
+

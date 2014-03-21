@@ -1,0 +1,8 @@
+;
+;       FRANCAIS.DLL module definition file
+;
+
+LIBRARY  FRANCAIS
+
+DESCRIPTION 'French language resources for Minta.'
+
